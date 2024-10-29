@@ -77,13 +77,6 @@ export default {
     ArrowLeft
   },
   data() {
-    return {
-      companies: {
-        cnpj: '',
-        name: '',
-        password: '',
-      }
-    }
   },
   created() {
 

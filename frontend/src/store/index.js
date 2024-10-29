@@ -6,4 +6,13 @@ export default createStore({
   mutations: {},
   actions: {},
   modules: {},
+  data() {
+    return {
+      result: {},
+      users: {
+        id: '',
+        name: '',
+      }
+    }
+  },
 });
