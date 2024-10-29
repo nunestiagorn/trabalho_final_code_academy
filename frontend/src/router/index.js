@@ -31,6 +31,11 @@ const router = createRouter({
       component: () => import("../views/RecruiterAuth/RecruiterLoginView.vue"),
     },
     {
+      path: "/recruiter-register",
+      name: "recruiter-register",
+      component: () => import("../views/RecruiterAuth/RecruiterRegisterView.vue"),
+    },
+    {
       path: "/:catchAll(.*)",
       name: "NotFound",
       component: NotFoundError,
