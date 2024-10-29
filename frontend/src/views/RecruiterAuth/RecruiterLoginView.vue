@@ -7,7 +7,7 @@
         <img src="../../assets/images/logo.png" alt="Logo do site" class="size-14" />
         <h2 class="text-2xl font-semibold italic">Insira os dados de sua empresa</h2>
       </div>
-      
+
       <form action="" class="w-full flex justify-evenly items-center gap-2">
         <div class="flex flex-col gap-8 w-5/6">
           <div class="flex items-center border-b-2 border-black">
@@ -48,7 +48,7 @@
   </main>
 </template>
 
-<script setup>
+<script>
 import { ref } from 'vue';
 import { Building2, LockKeyhole, ArrowRight, ArrowLeft } from 'lucide-vue-next';
 
@@ -67,5 +67,29 @@ function formatCNPJ() {
   }
 
   cnpj.value = value;
+}
+
+export default {
+  components: {
+    Building2,
+    LockKeyhole,
+    ArrowRight,
+    ArrowLeft
+  },
+  data() {
+    return {
+      companies: {
+        cnpj: '',
+        name: '',
+        password: '',
+      }
+    }
+  },
+  created() {
+
+  },
+  methods() {
+    
+  },
 }
 </script>

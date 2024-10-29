@@ -65,6 +65,29 @@
   </main>
 </template>
 
-<script setup>
+<script>
 import { ArrowLeft, ArrowRight, LockKeyhole, Mail } from 'lucide-vue-next'
+
+import axios from 'axios';
+
+export default {
+  components: {
+    ArrowLeft,
+    ArrowRight,
+    LockKeyhole,
+    Mail
+  },
+  data() {
+    return {
+      users: {
+        id: '',
+        name: '',
+        email: '',
+        role: '',
+        password: '',
+        id_companies: '',
+      }
+    }
+  }
+}
 </script>

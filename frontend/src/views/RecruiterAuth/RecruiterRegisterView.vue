@@ -53,7 +53,7 @@
     </main>
 </template>
 
-<script setup>
+<script>
 import { ref } from 'vue';
 import { Building2, Newspaper, LockKeyhole, ArrowRight, ArrowLeft } from 'lucide-vue-next';
 
@@ -72,5 +72,30 @@ function formatCNPJ() {
     }
 
     cnpj.value = value;
+}
+
+export default {
+    components: {
+        Building2,
+        LockKeyhole,
+        Newspaper,
+        ArrowRight,
+        ArrowLeft,
+    },
+    data() {
+        return {
+            companies: {
+                cnpj: '',
+                name: '',
+                password: '',
+            }
+        }
+    },
+    created() {
+
+    },
+    methods() {
+
+    },
 }
 </script>

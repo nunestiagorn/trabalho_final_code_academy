@@ -70,6 +70,28 @@
   </main>
 </template>
 
-<script setup>
+<script>
 import { ArrowLeft, ArrowRight, LockKeyhole, Mail, UserPlus } from 'lucide-vue-next'
+
+export default {
+  components: {
+    ArrowLeft,
+    ArrowRight,
+    LockKeyhole,
+    Mail,
+    UserPlus
+  },
+  data() {
+    return {
+      users: {
+        id: '',
+        name: '',
+        email: '',
+        role: '',
+        password: '',
+        id_companies: '',
+      }
+    }
+  }
+}
 </script>
