@@ -21,11 +21,11 @@ class CompaniesController extends Controller
     }
 
     public function update(Request $req){
-        $users = Companies::find($req->id);
+        $company = Companies::find($req->id);
 
-        $users->name = $req->name;
+        $company->name = $req->name;
 
-        $users->save();
+        $company->save();
 
         return response("Tudo certo", 200);
     }

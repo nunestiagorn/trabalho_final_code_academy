@@ -22,11 +22,11 @@ class JobOpeningsController extends Controller
     }
 
     public function update(Request $req){
-        $users = Job_openings::find($req->id);
+        $opening = Job_openings::find($req->id);
 
-        $users->name = $req->name;
+        $opening->name = $req->name;
 
-        $users->save();
+        $opening->save();
 
         return response("Tudo certo", 200);
     }
