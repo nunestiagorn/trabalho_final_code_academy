@@ -7,7 +7,7 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      name: "home",
+      name: "Home",
       component: HomeView,
     },
     {
@@ -34,6 +34,11 @@ const router = createRouter({
       path: "/recruiter-register",
       name: "recruiter-register",
       component: () => import("../views/RecruiterAuth/RecruiterRegisterView.vue"),
+    },
+    {
+      path: "/mainpage",
+      name: "mainpage",
+      component: () => import("../views/MainPages/UserMainPageView.vue"),
     },
     {
       path: "/:catchAll(.*)",

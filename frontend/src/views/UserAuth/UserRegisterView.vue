@@ -30,8 +30,6 @@
 
       <div class="flex items-center justify-center">
         <form @submit.prevent="registerUser" class="w-9/12 flex flex-col gap-8">
-          <input type="hidden" name="_token" :value="csrf" />
-
           <div class="flex items-center border-b-2 border-black">
             <UserPlus class="ml-2" />
             <input
@@ -134,16 +132,11 @@ export default {
   data() {
     return {
       users: {
-        id: "",
         name: "",
         email: "",
-        role: "",
         password: "",
-        id_companies: "",
+        role: "candidate",
       },
-      csrf: document.head.querySelector('meta[name="csrf-token"]')
-        ? document.head.querySelector('meta[name="csrf-token"]').content
-        : "",
     };
   },
   methods: {
@@ -153,13 +146,12 @@ export default {
       axios
         .post(`http://localhost:8001/api/users`, this.users)
         .then(({ data }) => {
-          // if (data.status === true) {
-          //   alert("Usuário criado com sucesso");
-          //   this.$router.push({ name: "home" });
-          // } else {
-          //   alert("Falha ao criar usuário");
-          // }
-          // ACIMA FAZER COM QUE O BACKEND RETORNE UM BOOLEANO QUANDO O USUÁRIO FOR CRIADO
+          if (data.status === true) {
+            alert("Usuário criado com sucesso");
+            this.$router.push({ name: "login" });
+          } else {
+            alert("Falha ao criar usuário");
+          }
         })
         .catch((err) => {
           console.error(err);

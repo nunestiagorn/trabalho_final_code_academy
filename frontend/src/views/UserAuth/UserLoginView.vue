@@ -132,8 +132,8 @@ export default {
           console.log(data);
           try {
             if (data.status === true) {
-              alert("Login realizado com sucesso!");
-              this.$router.push({ name: "Home" });
+              alert("Login efetuado com sucesso");
+              this.$router.push({ name: "mainpage" });
             } else {
               alert("Falha ao entrar na sua conta");
             }

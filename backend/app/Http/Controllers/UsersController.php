@@ -11,11 +11,13 @@ use Illuminate\Support\Facades\Auth;
 class UsersController extends Controller
 {
     //
-    public function index(){
+    public function index()
+    {
         return Users::all();
     }
 
-    public function store(Request $req){
+    public function store(Request $req)
+    {
         // Validação dos dados
         $validator = Validator::make($req->all(), [
             'name' => 'required|string|max:255',
@@ -34,13 +36,18 @@ class UsersController extends Controller
             'email' => $req->email,
             'role' => $req->role,
             'password' => Hash::make($req->password),
-            
+
         ]);
 
-        return response()->json(['user' => $user], 201);
+        return response()->json([
+            'status' => true,
+            'message' => "Registation Success"
+
+        ]);
     }
 
-    public function update(Request $req){
+    public function update(Request $req)
+    {
         $user = Users::find($req->id);
 
         $user->name = $req->name;
@@ -56,24 +63,26 @@ class UsersController extends Controller
         $credentials = $req->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
-               ]);
-               
-               if (Auth::attempt($credentials)) 
-               {
-                  return response()->json([ 'status' => true ,
-                                            'message' => "Success"
-               ]);
-               }
-                   return response()->json(['status' => false ,
-                                            'message' => "Fail"
-               
-               ]);
+        ]);
+
+        if (Auth::attempt($credentials)) {
+            return response()->json([
+                'status' => true,
+                'message' => "Success"
+            ]);
+        }
+        return response()->json([
+            'status' => false,
+            'message' => "Fail"
+
+        ]);
     }
 
-       public function delete(Request $req){
-             $user = Users::find($req->id);
-            
-             $user->delete();
-             return response("Usuário apagado", 200);
-       }
+    public function delete(Request $req)
+    {
+        $user = Users::find($req->id);
+
+        $user->delete();
+        return response("Usuário apagado", 200);
+    }
 }
