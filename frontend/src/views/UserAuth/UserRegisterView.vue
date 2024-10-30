@@ -11,7 +11,7 @@
     </section>
 
     <section
-      class="h-screen text-slate-950 flex flex-col gap-7 w-4/6 px-10 py-5"
+      class="h-screen text-slate-950 flex flex-col gap-6 w-4/6 px-10 py-5"
     >
       <div class="flex gap-4 items-center">
         <img
@@ -24,13 +24,14 @@
       <div class="italic font-medium">
         <h3 class="text-2xl font-bold">Bem-vindo ao Pampa's RH Enterprises</h3>
         <h4 class="text-lg">
-          Encontre aqui as melhores qualificações e oportunidades para a sua
-          carreira!
+          Encontre aqui as melhores oportunidades para a sua carreira!
         </h4>
       </div>
 
       <div class="flex items-center justify-center">
         <form @submit.prevent="registerUser" class="w-9/12 flex flex-col gap-8">
+          <input type="hidden" name="_token" :value="csrf" />
+
           <div class="flex items-center border-b-2 border-black">
             <UserPlus class="ml-2" />
             <input
@@ -41,7 +42,7 @@
             />
           </div>
 
-          <!-- <div class="flex items-center border-b-2 border-black">
+          <div class="flex items-center border-b-2 border-black">
             <Mail class="ml-2" />
             <input
               v-model="users.email"
@@ -49,7 +50,7 @@
               class="input1"
               placeholder="Insira seu email"
             />
-          </div> -->
+          </div>
 
           <div class="flex items-center border-b-2 border-black">
             <LockKeyhole class="ml-2" />
@@ -122,6 +123,7 @@ import {
 import axios from "axios";
 
 export default {
+  name: "Register",
   components: {
     ArrowLeft,
     ArrowRight,
@@ -139,6 +141,9 @@ export default {
         password: "",
         id_companies: "",
       },
+      csrf: document.head.querySelector('meta[name="csrf-token"]')
+        ? document.head.querySelector('meta[name="csrf-token"]').content
+        : "",
     };
   },
   methods: {

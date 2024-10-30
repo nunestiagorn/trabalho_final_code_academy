@@ -3,7 +3,7 @@
     class="bg-darkBlue h-screen flex flex-col items-center justify-center text-zinc-300"
   >
     <div
-      class="shadow-inset1 p-12 flex flex-col items-center gap-8 rounded-2xl"
+      class="p-12 flex flex-col items-center gap-8 rounded-2xl"
     >
       <h1 class="font-semibold text-5xl underline underline-offset-8">
         ERROR 404
