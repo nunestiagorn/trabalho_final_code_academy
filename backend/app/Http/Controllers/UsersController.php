@@ -41,8 +41,7 @@ class UsersController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => "Registation Success"
-
+            'message' => "Registation Success",
         ]);
     }
 
@@ -66,9 +65,17 @@ class UsersController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
+
+            $user = Auth::user();
+
             return response()->json([
                 'status' => true,
-                'message' => "Success"
+                'message' => "Success",
+                'user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                ]
             ]);
         }
         return response()->json([

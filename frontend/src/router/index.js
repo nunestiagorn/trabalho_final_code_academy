@@ -36,10 +36,11 @@ const router = createRouter({
       component: () => import("../views/RecruiterAuth/RecruiterRegisterView.vue"),
     },
     {
-      path: "/mainpage",
+      path: "/:id/mainpage",
       name: "mainpage",
       component: () => import("../views/MainPages/UserMainPageView.vue"),
     },
+    // relizar redirecionamento para erro caso o usuário acesse um mainPage com o id que não lhe pertence
     {
       path: "/:catchAll(.*)",
       name: "NotFound",
