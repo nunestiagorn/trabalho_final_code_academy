@@ -58,11 +58,11 @@ body {
 }
 
 .sidebar_item {
-  @apply bg-secondaryColor py-2.5 px-3 w-full flex items-center gap-1.5 rounded-lg cursor-pointer hover:translate-x-2 transition-all;
+  @apply bg-secondaryColor py-2.5 px-3 w-full flex items-center gap-1.5 rounded-lg cursor-pointer hover:translate-x-2 transition-all hover:bg-darkBlue hover:font-bold;
 }
 
 .sidebar_item_exit {
-  @apply bg-red-600 py-2.5 px-3 w-full flex items-center gap-1.5 rounded-lg cursor-pointer hover:translate-x-2 transition-all;
+  @apply bg-red-600 py-2.5 px-3 w-full flex items-center gap-1.5 rounded-lg cursor-pointer hover:-translate-y-1 transition-all hover:bg-red-800 hover:font-bold;
 }
 
 .bg-cover {

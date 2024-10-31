@@ -39,8 +39,16 @@ const router = createRouter({
       path: "/:id/mainpage",
       name: "mainpage",
       component: () => import("../views/MainPages/UserMainPageView.vue"),
+      beforeEnter: (to, from, next) => {
+        const loggedUserId = localStorage.getItem("userId");
+
+        if (to.params.id !== loggedUserId) {
+          next({ name: "mainpage", params: { id: loggedUserId } });
+        } else {
+          next();
+        }
+      }
     },
-    // relizar redirecionamento para erro caso o usuário acesse um mainPage com o id que não lhe pertence
     {
       path: "/:catchAll(.*)",
       name: "NotFound",
