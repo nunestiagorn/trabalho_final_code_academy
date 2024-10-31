@@ -18,6 +18,7 @@ export default {
       },
       fontSize: {
         title: "4rem",
+        md: "0.9rem",
       },
       borderRadius: {
         blob1: "30% 70% 59% 41% / 64% 36% 64% 36%",
