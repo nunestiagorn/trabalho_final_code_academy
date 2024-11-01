@@ -133,7 +133,12 @@ export default {
           try {
             if (data.status === true) {
               alert("Login efetuado com sucesso");
-              this.$router.push({ name: "mainpage", params: { id: data.user.id } });
+              localStorage.setItem("userId", data.user.id);
+
+              this.$router.push({
+                name: "mainpage",
+                params: { id: data.user.id },
+              });
             } else {
               alert("Falha ao entrar na sua conta");
             }
