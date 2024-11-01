@@ -33,7 +33,8 @@ const router = createRouter({
     {
       path: "/recruiter-register",
       name: "recruiter-register",
-      component: () => import("../views/RecruiterAuth/RecruiterRegisterView.vue"),
+      component: () =>
+        import("../views/RecruiterAuth/RecruiterRegisterView.vue"),
     },
     {
       path: "/:id/mainpage",
@@ -42,12 +43,14 @@ const router = createRouter({
       beforeEnter: (to, from, next) => {
         const loggedUserId = localStorage.getItem("userId");
 
-        if (to.params.id !== loggedUserId) {
+        if (!loggedUserId) {
+          next({ name: "login" });
+        } else if (to.params.id !== loggedUserId) {
           next({ name: "mainpage", params: { id: loggedUserId } });
         } else {
           next();
         }
-      }
+      },
     },
     {
       path: "/:catchAll(.*)",
