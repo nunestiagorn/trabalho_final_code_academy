@@ -1,9 +1,11 @@
 <script setup>
-import { RouterView } from 'vue-router'
+import { RouterView } from "vue-router";
 </script>
 
 <template>
-  <div>
-  </div>
-  <RouterView />
+  <RouterView v-slot="{ Component }">
+    <Transition name="route" mode="out-in">
+      <component :is="Component" />
+    </Transition>
+  </RouterView>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <aside class="bg-neutral-200 flex flex-col w-96 items-center gap-6 p-3">
+  <aside class="bg-neutral-200 flex flex-col w-3/12 items-center gap-6 p-3">
     <div class="flex flex-col pt-4">
       <div class="flex gap-4 items-center">
         <img
@@ -26,19 +26,24 @@
           <UserCog />
           Editar Perfil
         </RouterLink>
-        <div class="sidebar_item">
+        <RouterLink to="/123" class="sidebar_item">
           <FileText />
           Currículo
-        </div>
-        <div class="sidebar_item">
+        </RouterLink>
+        <RouterLink to="/user-vagas" class="sidebar_item">
           <Handshake />
+          Procurar Vagas
+        </RouterLink>
+        <RouterLink to="/123" class="sidebar_item">
+          <Building2 />
           Empresas
-        </div>
-        <div class="sidebar_item">
+        </RouterLink>
+        <RouterLink to="/123" class="sidebar_item">
           <Info />
           Ajuda
-        </div>
+        </RouterLink>
       </div>
+
       <div class="flex gap-2">
         <RouterLink @click="Sair()" to="/" class="sidebar_item_exit">
           <LogOut />
@@ -62,7 +67,9 @@ import {
   Info,
   LogOut,
   UserCog,
+  Building2,
 } from "lucide-vue-next";
+
 import axios from "axios";
 import { RouterLink } from "vue-router";
 
@@ -75,6 +82,7 @@ export default {
     FileText,
     Handshake,
     Info,
+    Building2,
   },
   data() {
     return {

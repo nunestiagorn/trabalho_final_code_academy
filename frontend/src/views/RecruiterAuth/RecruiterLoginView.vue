@@ -23,9 +23,8 @@
                 type="text"
                 class="input2"
                 placeholder="Insira o CNPJ"
-                v-model="cnpj"
+                v-model="companies.id"
                 @input="formatCNPJ"
-                maxlength="18"
               />
             </div>
 
@@ -77,22 +76,6 @@
 import { ref } from "vue";
 import { Building2, LockKeyhole, ArrowRight, ArrowLeft } from "lucide-vue-next";
 
-const cnpj = ref("");
-
-function formatCNPJ() {
-  let value = cnpj.value.replace(/\D/g, "");
-  value = value.slice(0, 14);
-
-  if (value.length <= 14) {
-    value = value.replace(/^(\d{2})(\d)/, "$1.$2");
-    value = value.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
-    value = value.replace(/\.(\d{3})(\d)/, ".$1/$2");
-    value = value.replace(/(\d{4})(\d)/, "$1-$2");
-  }
-
-  cnpj.value = value;
-}
-
 export default {
   components: {
     Building2,
@@ -100,8 +83,31 @@ export default {
     ArrowRight,
     ArrowLeft,
   },
-  data() {},
-  created() {},
-  methods() {},
+  data() {
+    return {
+      companies: {
+        id: "",
+        name: "",
+      },
+      csrf: document.head.querySelector('meta[name="csrf-token"]')
+        ? document.head.querySelector('meta[name="csrf-token"]').content
+        : "",
+    };
+  },
+  methods: {
+    formatCNPJ() {
+      let value = this.companies.id.replace(/\D/g, "");
+      value = value.slice(0, 14);
+
+      if (value.length <= 14) {
+        value = value.replace(/^(\d{2})(\d)/, "$1.$2");
+        value = value.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
+        value = value.replace(/\.(\d{3})(\d)/, ".$1/$2");
+        value = value.replace(/(\d{4})(\d)/, "$1-$2");
+      }
+
+      this.companies.id = value;
+    },
+  },
 };
 </script>

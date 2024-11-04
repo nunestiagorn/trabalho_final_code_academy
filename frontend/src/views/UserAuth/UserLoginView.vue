@@ -72,6 +72,7 @@
             >
               Entrar
             </button>
+            <Modal />
           </div>
         </form>
       </div>
@@ -101,6 +102,7 @@
 
 <script>
 import { ArrowLeft, ArrowRight, LockKeyhole, Mail } from "lucide-vue-next";
+import Modal from '@/components/Modal.vue'
 
 import axios from "axios";
 
@@ -111,6 +113,7 @@ export default {
     ArrowRight,
     LockKeyhole,
     Mail,
+    Modal,
   },
   data() {
     return {

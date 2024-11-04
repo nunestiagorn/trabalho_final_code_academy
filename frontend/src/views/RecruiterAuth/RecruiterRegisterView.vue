@@ -42,6 +42,16 @@
                 placeholder="Nome da Empresa"
               />
             </div>
+
+            <div class="flex items-center border-b-2 border-black">
+              <LockKeyhole class="ml-2" />
+              <input
+                v-model="companies.password"
+                type="text"
+                class="input2"
+                placeholder="Senha"
+              />
+            </div>
           </div>
 
           <button
@@ -84,7 +94,13 @@
 
 <script>
 import { ref } from "vue";
-import { Building2, Newspaper, ArrowRight, ArrowLeft } from "lucide-vue-next";
+import {
+  Building2,
+  Newspaper,
+  ArrowRight,
+  ArrowLeft,
+  LockKeyhole,
+} from "lucide-vue-next";
 
 import axios from "axios";
 
@@ -94,6 +110,7 @@ export default {
     Newspaper,
     ArrowRight,
     ArrowLeft,
+    LockKeyhole,
   },
   data() {
     return {

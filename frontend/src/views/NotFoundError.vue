@@ -2,9 +2,7 @@
   <div
     class="bg-darkBlue h-screen flex flex-col items-center justify-center text-zinc-300"
   >
-    <div
-      class="p-12 flex flex-col items-center gap-8 rounded-2xl"
-    >
+    <div class="p-12 flex flex-col items-center gap-8 rounded-2xl">
       <h1 class="font-semibold text-5xl underline underline-offset-8">
         ERROR 404
       </h1>
@@ -12,7 +10,7 @@
         Ops! Esta página não existe em nosso site!
       </h1>
       <RouterLink
-        to="/"
+        :to="prevRoute || '/'"
         class="rounded-blob1 hover:rounded-blob2 transition-all bg-darkerBlue p-20 shadow-neumorfismo1 max-w-fit"
       >
         <h2 class="font-bold text-3xl">Voltar</h2>
@@ -20,3 +18,18 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      prevRoute: null,
+    };
+  },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.prevRoute = from.path;
+    });
+  },
+};
+</script>

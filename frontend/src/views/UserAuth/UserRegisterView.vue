@@ -106,6 +106,17 @@
         </RouterLink>
       </div>
     </section>
+
+    <Modal :visivel="Visivel" @close="Visivel = false">
+      <template #header>Sucesso</template>
+      <template #body>
+        <p>Usuário criado com sucesso!</p>
+      </template>
+      <template #footer>
+        <RouterLink to="/login" @click="redirecionarLogin">Ok</RouterLink>
+      </template>
+    </Modal>
+
   </main>
 </template>
 
@@ -119,6 +130,7 @@ import {
 } from "lucide-vue-next";
 
 import axios from "axios";
+import Modal from "@/components/Modal.vue";
 
 export default {
   name: "Register",
@@ -128,6 +140,7 @@ export default {
     LockKeyhole,
     Mail,
     UserPlus,
+    Modal,
   },
   data() {
     return {
@@ -137,18 +150,16 @@ export default {
         password: "",
         role: "candidate",
       },
+      Visivel: false,
     };
   },
   methods: {
-    registerUser(event) {
-      event.preventDefault();
-
+    registerUser() {
       axios
         .post(`http://localhost:8001/api/users`, this.users)
         .then(({ data }) => {
           if (data.status === true) {
-            alert("Usuário criado com sucesso");
-            this.$router.push({ name: "login" });
+            this.Visivel = true;
           } else {
             alert("Falha ao criar usuário");
           }
@@ -158,6 +169,10 @@ export default {
           alert("Erro ao criar usuário");
         });
     },
+    redirecionarLogin() {
+      this.Visivel = false;
+      this.$router.push({ name: "login" });
+    }
   },
 };
 </script>
