@@ -40,7 +40,7 @@ class UsersController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => "Registation Success",
+            'message' => "Registration Success",
         ]);
     }
 
@@ -49,6 +49,8 @@ class UsersController extends Controller
         $user = Users::find($req->id);
 
         $user->name = $req->name;
+        $user->email = $req->email;
+        $user->password = $req->password;
 
         $user->save();
 
