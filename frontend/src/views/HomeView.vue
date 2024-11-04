@@ -1,18 +1,28 @@
 <template>
-  <main class="px-10 py-5 flex flex-col justify-between gap-10 bg-cover">
+  <main class="px-10 py-4 flex flex-col justify-between gap-10 bg-cover">
     <div class="flex justify-between items-center">
       <div class="flex gap-4 items-center">
-        <img src="../assets/images/logo.png" alt="Logo da página" class="w-20 drop-shadow-imageShadow1" />
-        <h1 class="text-zinc-200 text-5xl font-semibold drop-shadow-imageShadow1 italic">
+        <img
+          src="../assets/images/logo.png"
+          alt="Logo da página"
+          class="w-20 drop-shadow-imageShadow1"
+        />
+        <h1
+          class="text-zinc-200 text-5xl font-semibold drop-shadow-imageShadow1 italic"
+        >
           Pampa's RH
         </h1>
       </div>
       <nav class="flex gap-8 items-center font-bold text-xl">
         <RouterLink to="/about" class="navHover">Sobre nós</RouterLink>
         <RouterLink to="/contact" class="navHover">Contato</RouterLink>
-        <RouterLink to="/recruiter-login" class="navHover">Seja um recrutador</RouterLink>
-        <RouterLink to="/login"
-          class="px-5 py-2.5 bg-lightBlue rounded-full hover:bg-darkBlue transition-all duration-150 shadow-xl flex gap-1">
+        <RouterLink to="/company-login" class="navHover"
+          >Seja um recrutador</RouterLink
+        >
+        <RouterLink
+          to="/login"
+          class="px-5 py-2.5 bg-lightBlue rounded-full hover:bg-darkBlue transition-all duration-150 shadow-xl flex gap-1"
+        >
           Login
           <User stroke-width="3px" />
         </RouterLink>
@@ -28,24 +38,32 @@
           vagas disponível no mercado!
         </h2>
         <div class="flex items-center justify-start text-lg gap-4">
-          <RouterLink to="/login"
-            class="px-5 py-2.5 bg-lightBlue rounded-full hover:bg-darkBlue transition-all duration-200 shadow-md font-semibold flex gap-1">
+          <RouterLink
+            to="/login"
+            class="px-5 py-2.5 bg-lightBlue rounded-full hover:bg-darkBlue transition-all duration-200 shadow-md font-semibold flex gap-1"
+          >
             <User stroke-width="3px" />
             Login
           </RouterLink>
-          <RouterLink to="/recruiter-login"
-            class="px-5 py-2.5 rounded-full transition-all duration-200 shadow-md font-semibold border-2 border-zinc-300 hover:bg-secondaryColor hover:border-sky-900">
+          <RouterLink
+            to="/company-login"
+            class="px-5 py-2.5 rounded-full transition-all duration-200 shadow-md font-semibold border-2 border-zinc-300 hover:bg-secondaryColor hover:border-sky-900"
+          >
             Contrate agora
           </RouterLink>
         </div>
       </div>
+
       <div class="drop-shadow-imageShadow2">
-        <img src="../assets/images/HomeImage1.jpg" alt=""
-          class="clip-home home-image relative right-24 bottom-5 z-10" />
+        <img
+          src="../assets/images/HomeImage1.jpg"
+          alt=""
+          class="clip-home home-image relative right-24 bottom-7 z-10"
+        />
         <div class="job-icons bottom-[28rem] right-28">
           <FileUser color="#ffd91a" size="56px" />
         </div>
-        <div class="job-icons bottom-96 left-48">
+        <div class="job-icons bottom-96 left-44">
           <Search color="#e60000" size="56px" />
         </div>
         <div class="job-icons bottom-72 right-14">
@@ -65,5 +83,5 @@
 </template>
 
 <script setup>
-import { User, FileUser, Search, BriefcaseBusiness } from 'lucide-vue-next'
+import { User, FileUser, Search, BriefcaseBusiness } from "lucide-vue-next";
 </script>

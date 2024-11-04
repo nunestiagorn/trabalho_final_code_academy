@@ -76,7 +76,7 @@
               </div>
               <div class="flex gap-1 group">
                 <RouterLink
-                  to="/recruiter-login"
+                  to="/company-login"
                   class="underline underline-offset-4 hover:text-secondaryColor"
                 >
                   <p>É um recrutador? Entre aqui!</p>
@@ -106,6 +106,18 @@
         </RouterLink>
       </div>
     </section>
+
+    <Modal
+      :visivel="Visivel"
+      @close="Visivel = false"
+      @confirm="redirecionarLogin"
+    >
+      <template #header>Sucesso</template>
+      <template #body>
+        <p>Usuário criado com sucesso!</p>
+      </template>
+      <template #footer></template>
+    </Modal>
   </main>
 </template>
 
@@ -119,15 +131,17 @@ import {
 } from "lucide-vue-next";
 
 import axios from "axios";
+import Modal from "@/components/Modal.vue";
 
 export default {
-  name: "Register",
+  name: "UserRegister",
   components: {
     ArrowLeft,
     ArrowRight,
     LockKeyhole,
     Mail,
     UserPlus,
+    Modal,
   },
   data() {
     return {
@@ -137,18 +151,16 @@ export default {
         password: "",
         role: "candidate",
       },
+      Visivel: false,
     };
   },
   methods: {
-    registerUser(event) {
-      event.preventDefault();
-
+    registerUser() {
       axios
         .post(`http://localhost:8001/api/users`, this.users)
         .then(({ data }) => {
           if (data.status === true) {
-            alert("Usuário criado com sucesso");
-            this.$router.push({ name: "login" });
+            this.Visivel = true;
           } else {
             alert("Falha ao criar usuário");
           }
@@ -157,6 +169,10 @@ export default {
           console.error(err);
           alert("Erro ao criar usuário");
         });
+    },
+    redirecionarLogin() {
+      this.Visivel = false;
+      this.$router.push({ name: "login" });
     },
   },
 };

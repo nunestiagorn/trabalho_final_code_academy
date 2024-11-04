@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -21,7 +21,7 @@
 }
 
 body {
-  font-family: 'Nunito', sans-serif;
+  font-family: "Nunito", sans-serif;
   @apply text-zinc-300 bg-neutral-200;
 }
 
@@ -35,6 +35,16 @@ body {
   background-clip: padding-box;
   border-radius: 9999px;
   background-color: #aaaaaa;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.45s ease-out;
 }
 
 .navHover {
@@ -57,16 +67,20 @@ body {
   @apply bg-darkerBlue font-semibold px-4 py-1.5 w-full rounded-t-lg focus:outline-none focus:ring-0;
 }
 
-.sidebar_item {
-  @apply bg-secondaryColor py-2.5 px-3 w-full flex items-center gap-1.5 rounded-lg cursor-pointer hover:translate-x-2 transition-all hover:bg-darkBlue hover:font-bold shadow-xl;
+.user_sidebar_item {
+  @apply bg-secondaryColor py-2.5 px-3 w-full flex items-center gap-1.5 rounded-lg cursor-pointer hover:translate-x-2 transition-all hover:bg-darkBlue hover:font-bold shadow-lg;
 }
 
 .sidebar_item_exit {
   @apply bg-red-600 py-2.5 px-3 w-full flex items-center gap-1.5 rounded-lg cursor-pointer hover:-translate-y-1 transition-all hover:bg-red-800 hover:font-bold shadow-xl;
 }
 
+.company_sidebar_item {
+  @apply bg-secondaryColor py-2.5 px-3 w-full flex items-center gap-1.5 rounded-lg cursor-pointer hover:-translate-x-2 transition-all hover:bg-darkBlue hover:font-bold shadow-lg;
+}
+
 .UserCard {
-  @apply bg-zinc-300 w-72 h-[9.5rem] p-4 rounded-lg shadow-lg hover:bg-zinc-400 hover:scale-105 transition-transform overflow-hidden flex flex-col items-center gap-1.5 text-darkText;
+  @apply bg-zinc-300 w-72 h-[9.55rem] px-4 py-3 rounded-lg shadow-lg hover:scale-105 transition-transform overflow-hidden flex flex-col items-center gap-2.5 text-darkText;
 }
 
 .bg-cover {
