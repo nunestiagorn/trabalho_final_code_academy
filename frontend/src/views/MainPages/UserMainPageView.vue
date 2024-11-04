@@ -3,7 +3,7 @@
     <section
       class="h-full w-full flex flex-col items-center overflow-y-scroll p-5 gap-5"
     >
-      <h1 class="text-5xl font-bold">Suas Candidaturas</h1>
+      <h1 class="text-5xl font-bold drop-shadow-textShadow2">Suas Candidaturas</h1>
       <div class="flex gap-4 flex-wrap justify-center">
         <div class="UserCard border-b-8 border-yellow-600">
           <h3 class="font-bold text-xl">Suporte de TI</h3>
@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import Sidebar from "@/components/UserSidebar.vue";
+import Sidebar from "@/components/sidebars/UserSidebar.vue";
 
 export default {
   components: {

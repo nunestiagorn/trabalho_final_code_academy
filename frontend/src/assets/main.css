@@ -37,22 +37,14 @@ body {
   background-color: #aaaaaa;
 }
 
-.router-enter-from {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
-  transform: translateX(60px);
 }
 
-.route-enter-active {
-  transition: all 0.35s ease-out;
-}
-
-.route-leave-to {
-  opacity: 0;
-  transform: translateX(-60px);
-}
-
-.route-leave-active {
-  transition: all 0.35s ease-out;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.45s ease-out;
 }
 
 .navHover {
@@ -75,12 +67,16 @@ body {
   @apply bg-darkerBlue font-semibold px-4 py-1.5 w-full rounded-t-lg focus:outline-none focus:ring-0;
 }
 
-.sidebar_item {
+.user_sidebar_item {
   @apply bg-secondaryColor py-2.5 px-3 w-full flex items-center gap-1.5 rounded-lg cursor-pointer hover:translate-x-2 transition-all hover:bg-darkBlue hover:font-bold shadow-lg;
 }
 
 .sidebar_item_exit {
   @apply bg-red-600 py-2.5 px-3 w-full flex items-center gap-1.5 rounded-lg cursor-pointer hover:-translate-y-1 transition-all hover:bg-red-800 hover:font-bold shadow-xl;
+}
+
+.company_sidebar_item {
+  @apply bg-secondaryColor py-2.5 px-3 w-full flex items-center gap-1.5 rounded-lg cursor-pointer hover:-translate-x-2 transition-all hover:bg-darkBlue hover:font-bold shadow-lg;
 }
 
 .UserCard {

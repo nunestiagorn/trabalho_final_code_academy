@@ -22,11 +22,11 @@
       class="flex flex-col justify-between h-full w-full px-4 font-semibold text-zinc-200 text-lg"
     >
       <div class="flex flex-col gap-5">
-        <RouterLink to="/editar_perfil" class="sidebar_item">
+        <RouterLink to="/editar_perfil" class="user_sidebar_item">
           <UserCog />
           Editar Perfil
         </RouterLink>
-        <RouterLink to="/123" class="sidebar_item">
+        <RouterLink to="/123" class="user_sidebar_item">
           <FileText />
           Currículo
         </RouterLink>
@@ -38,11 +38,11 @@
           <Handshake />
           Procurar Vagas
         </RouterLink>
-        <RouterLink to="/123" class="sidebar_item">
+        <RouterLink to="/123" class="user_sidebar_item">
           <Building2 />
           Empresas
         </RouterLink>
-        <RouterLink to="/123" class="sidebar_item">
+        <RouterLink to="/123" class="user_sidebar_item">
           <Info />
           Ajuda
         </RouterLink>
