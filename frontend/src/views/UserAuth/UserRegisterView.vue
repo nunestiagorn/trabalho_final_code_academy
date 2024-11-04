@@ -76,7 +76,7 @@
               </div>
               <div class="flex gap-1 group">
                 <RouterLink
-                  to="/recruiter-login"
+                  to="/company-login"
                   class="underline underline-offset-4 hover:text-secondaryColor"
                 >
                   <p>É um recrutador? Entre aqui!</p>
@@ -134,7 +134,7 @@ import axios from "axios";
 import Modal from "@/components/Modal.vue";
 
 export default {
-  name: "Register",
+  name: "UserRegister",
   components: {
     ArrowLeft,
     ArrowRight,

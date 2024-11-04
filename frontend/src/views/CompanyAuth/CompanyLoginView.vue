@@ -15,26 +15,35 @@
           </h2>
         </div>
 
-        <form action="" class="w-full flex justify-evenly items-center gap-2">
+        <form
+          @submit.prevent="loginCompany"
+          class="w-full flex justify-evenly items-center gap-2"
+        >
           <div class="flex flex-col gap-8 w-5/6">
             <div class="flex items-center border-b-2 border-black">
               <Building2 class="ml-2" />
               <input
+                v-model="companies.cnpj"
                 type="text"
                 class="input2"
                 placeholder="Insira o CNPJ"
-                v-model="companies.id"
                 @input="formatCNPJ"
               />
             </div>
 
             <div class="flex items-center border-b-2 border-black">
               <LockKeyhole class="ml-2" />
-              <input type="password" class="input2" placeholder="Sua Senha" />
+              <input
+                v-model="companies.password"
+                type="password"
+                class="input2"
+                placeholder="Sua Senha"
+              />
             </div>
           </div>
 
           <button
+            type="submit"
             class="p-4 bg-darkBlue rounded-full ml-9 group shadow-shadow3"
           >
             <ArrowRight
@@ -47,7 +56,7 @@
           <h2>Não possui empresa cadastrada?</h2>
           <div class="group flex gap-1">
             <RouterLink
-              to="/recruiter-register"
+              to="/company-register"
               class="underline underline-offset-4 hover:text-secondaryColor"
             >
               <p>Cadastre Já!</p>
@@ -76,6 +85,8 @@
 import { ref } from "vue";
 import { Building2, LockKeyhole, ArrowRight, ArrowLeft } from "lucide-vue-next";
 
+import axios from "axios";
+
 export default {
   components: {
     Building2,
@@ -87,7 +98,8 @@ export default {
     return {
       companies: {
         id: "",
-        name: "",
+        cnpj: "",
+        password: "",
       },
       csrf: document.head.querySelector('meta[name="csrf-token"]')
         ? document.head.querySelector('meta[name="csrf-token"]').content
@@ -96,7 +108,7 @@ export default {
   },
   methods: {
     formatCNPJ() {
-      let value = this.companies.id.replace(/\D/g, "");
+      let value = this.companies.cnpj.replace(/\D/g, "");
       value = value.slice(0, 14);
 
       if (value.length <= 14) {
@@ -106,7 +118,26 @@ export default {
         value = value.replace(/(\d{4})(\d)/, "$1-$2");
       }
 
-      this.companies.id = value;
+      this.companies.cnpj = value;
+    },
+    loginCompany() {
+      axios
+        .post(`http://localhost:8001/api/companies/login`, this.companies)
+        .then(({ data }) => {
+          try {
+            if (data.status === true) {
+              this.companyId = data.company.id;
+              localStorage.setItem("companyId", this.companyId);
+
+              this.$router.push({ name: "company-mainpage", params: { id: this.companyId } });
+            } else {
+              alert("Falha ao entrar na sua conta");
+            }
+          } catch (err) {
+            alert("Falha no sistema");
+            console.log(err);
+          }
+        });
     },
   },
 };

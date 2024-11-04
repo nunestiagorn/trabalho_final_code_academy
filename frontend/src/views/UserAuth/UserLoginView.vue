@@ -56,7 +56,7 @@
               </div>
               <div class="flex gap-1 group">
                 <RouterLink
-                  to="/recruiter-login"
+                  to="/company-login"
                   class="underline underline-offset-4 hover:text-secondaryColor"
                 >
                   <p>É um recrutador? Entre aqui!</p>
@@ -145,7 +145,6 @@ export default {
       axios
         .post(`http://localhost:8001/api/users/login`, this.users)
         .then(({ data }) => {
-          console.log(data);
           try {
             if (data.status === true) {
               this.userId = data.user.id;

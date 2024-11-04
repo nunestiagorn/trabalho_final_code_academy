@@ -16,7 +16,7 @@
       <nav class="flex gap-8 items-center font-bold text-xl">
         <RouterLink to="/about" class="navHover">Sobre nós</RouterLink>
         <RouterLink to="/contact" class="navHover">Contato</RouterLink>
-        <RouterLink to="/recruiter-login" class="navHover"
+        <RouterLink to="/company-login" class="navHover"
           >Seja um recrutador</RouterLink
         >
         <RouterLink
@@ -46,7 +46,7 @@
             Login
           </RouterLink>
           <RouterLink
-            to="/recruiter-login"
+            to="/company-login"
             class="px-5 py-2.5 rounded-full transition-all duration-200 shadow-md font-semibold border-2 border-zinc-300 hover:bg-secondaryColor hover:border-sky-900"
           >
             Contrate agora

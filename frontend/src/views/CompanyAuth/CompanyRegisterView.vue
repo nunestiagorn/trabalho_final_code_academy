@@ -25,10 +25,10 @@
             <div class="flex items-center border-b-2 border-black">
               <Building2 class="ml-2" />
               <input
+                v-model="companies.cnpj"
                 type="text"
                 class="input2"
                 placeholder="Insira o CNPJ"
-                v-model="companies.id"
                 @input="formatCNPJ"
               />
             </div>
@@ -47,7 +47,7 @@
               <LockKeyhole class="ml-2" />
               <input
                 v-model="companies.password"
-                type="text"
+                type="password"
                 class="input2"
                 placeholder="Senha"
               />
@@ -67,7 +67,7 @@
           <h2>Já possui empresa cadastrada?</h2>
           <div class="group flex gap-1">
             <RouterLink
-              to="/recruiter-login"
+              to="/company-login"
               class="underline underline-offset-4 hover:text-secondaryColor"
             >
               <p>Entre agora!</p>
@@ -105,6 +105,7 @@ import {
 import axios from "axios";
 
 export default {
+  name: "CompanyRegister",
   components: {
     Building2,
     Newspaper,
@@ -117,6 +118,9 @@ export default {
       companies: {
         id: "",
         name: "",
+        cnpj: "",
+        password: "",
+        description: "Adicione uma descrição à sua empresa!",
       },
       csrf: document.head.querySelector('meta[name="csrf-token"]')
         ? document.head.querySelector('meta[name="csrf-token"]').content
@@ -125,7 +129,7 @@ export default {
   },
   methods: {
     formatCNPJ() {
-      let value = this.companies.id.replace(/\D/g, "");
+      let value = this.companies.cnpj.replace(/\D/g, "");
       value = value.slice(0, 14);
 
       if (value.length <= 14) {
@@ -135,12 +139,19 @@ export default {
         value = value.replace(/(\d{4})(\d)/, "$1-$2");
       }
 
-      this.companies.id = value;
+      this.companies.cnpj = value;
     },
     registerCompany() {
       axios
         .post(`http://localhost:8001/api/companies`, this.companies)
-        .then(({ data }) => {})
+        .then(({ data }) => {
+          if (data.status === true) {
+            alert("Empresa cadastrada com sucesso!");
+            this.$router.push({ name: "company-login" });
+          } else {
+            alert("Falha ao criar empresa");
+          }
+        })
         .catch((err) => {
           console.error(err);
           alert("Erro ao criar empresa");

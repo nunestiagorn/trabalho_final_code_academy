@@ -26,15 +26,15 @@ const router = createRouter({
       component: () => import("../views/UserAuth/UserRegisterView.vue"),
     },
     {
-      path: "/recruiter-login",
-      name: "recruiter-login",
-      component: () => import("../views/RecruiterAuth/RecruiterLoginView.vue"),
+      path: "/company-login",
+      name: "company-login",
+      component: () => import("../views/CompanyAuth/CompanyLoginView.vue"),
     },
     {
-      path: "/recruiter-register",
-      name: "recruiter-register",
+      path: "/company-register",
+      name: "company-register",
       component: () =>
-        import("../views/RecruiterAuth/RecruiterRegisterView.vue"),
+        import("../views/CompanyAuth/CompanyRegisterView.vue"),
     },
     {
       path: "/:id/mainpage",
@@ -47,6 +47,22 @@ const router = createRouter({
           next({ name: "login" });
         } else if (to.params.id !== loggedUserId) {
           next({ name: "mainpage", params: { id: loggedUserId } });
+        } else {
+          next();
+        }
+      },
+    },
+    {
+      path: "/:id/company-mainpage",
+      name: "company-mainpage",
+      component: () => import("../views/MainPages/CompanyMainPageView.vue"),
+      beforeEnter: (to, from, next) => {
+        const loggedCompanyId = localStorage.getItem("companyId");
+
+        if (!loggedCompanyId) {
+          next({ name: "company-login" });
+        } else if (to.params.id !== loggedCompanyId) {
+          next({ name: "company-mainpage", params: { id: loggedCompanyId } });
         } else {
           next();
         }
