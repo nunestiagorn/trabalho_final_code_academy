@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller
 {
-    //
     public function index()
     {
         return Users::all();
@@ -41,7 +40,7 @@ class UsersController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => "Registation Success",
+            'message' => "Registration Success",
         ]);
     }
 
@@ -50,6 +49,8 @@ class UsersController extends Controller
         $user = Users::find($req->id);
 
         $user->name = $req->name;
+        $user->email = $req->email;
+        $user->password = $req->password;
 
         $user->save();
 
@@ -83,6 +84,17 @@ class UsersController extends Controller
             'message' => "Fail"
 
         ]);
+    }
+
+    public function show($id)
+    {
+        $user = Users::find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'Usuário não encontrado'], 404);
+        }
+
+        return response()->json($user, 200);
     }
 
     public function delete(Request $req)

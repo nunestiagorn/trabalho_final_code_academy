@@ -11,5 +11,13 @@ class Companies extends Model
 
     protected $fillable = [
         'name',
+        'cnpj',
+        'password',
+        'description',
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
     ];
 }

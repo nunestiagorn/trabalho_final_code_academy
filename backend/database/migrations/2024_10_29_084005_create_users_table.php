@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('password');
             $table->enum('role', ['admin', 'recruiter', 'candidate']);
+            $table->string('password');
+            $table->foreignId('company_id')->nullable()->constrained('companies');
             $table->timestamps();
         });
     }
