@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('job_openings', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('description');
+            $table->foreignId('company_id')->nullable()->constrained('companies');
             $table->timestamps();
         });
     }
