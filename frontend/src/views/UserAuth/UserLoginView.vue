@@ -72,7 +72,6 @@
             >
               Entrar
             </button>
-            <Modal />
           </div>
         </form>
       </div>
@@ -97,12 +96,24 @@
         class="w-[36rem] h-[28rem] rounded-2xl shadow-shadow1 bg-contain bg-center"
       />
     </section>
+
+    <Modal
+      :visivel="Visivel"
+      @close="Visivel = false"
+      @confirm="redirecionarLogin"
+    >
+      <template #header>Sucesso</template>
+      <template #body>
+        <p>Usuário criado com sucesso!</p>
+      </template>
+      <template #footer></template>
+    </Modal>
   </main>
 </template>
 
 <script>
 import { ArrowLeft, ArrowRight, LockKeyhole, Mail } from "lucide-vue-next";
-import Modal from '@/components/Modal.vue'
+import Modal from "@/components/Modal.vue";
 
 import axios from "axios";
 
@@ -125,6 +136,8 @@ export default {
         password: "",
         id_companies: "",
       },
+      userId: "",
+      Visivel: false,
     };
   },
   methods: {
@@ -135,13 +148,10 @@ export default {
           console.log(data);
           try {
             if (data.status === true) {
-              alert("Login efetuado com sucesso");
-              localStorage.setItem("userId", data.user.id);
+              this.userId = data.user.id;
+              localStorage.setItem("userId", this.userId);
 
-              this.$router.push({
-                name: "mainpage",
-                params: { id: data.user.id },
-              });
+              this.Visivel = true;
             } else {
               alert("Falha ao entrar na sua conta");
             }
@@ -149,6 +159,14 @@ export default {
             alert("Falha no sistema");
           }
         });
+    },
+    redirecionarLogin() {
+      this.Visivel = false;
+
+      this.$router.push({
+        name: "mainpage",
+        params: { id: this.userId },
+      });
     },
   },
 };

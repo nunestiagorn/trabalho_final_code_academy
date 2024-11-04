@@ -22,12 +22,14 @@
             <slot name="footer"></slot>
           </div>
 
-          <button
-            class="bg-primaryColor p-1.5 px-2.5 rounded-lg text-lg text-zinc-200 font-semibold self-end"
-            @click="fecharModal"
-          >
-            OK
-          </button>
+          <div class="flex justify-end gap-4 pr-4 pb-2">
+            <button
+              @click="confirmRedirection"
+              class="bg-primaryColor p-1.5 px-2.5 rounded-lg text-lg text-zinc-200 font-semibold"
+            >
+              OK
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -44,12 +46,13 @@ export default {
     },
   },
   methods: {
-    fecharModal() {
-      this.$emit("close");
+    confirmRedirection() {
+      this.$emit("confirm");
     },
   },
 };
 </script>
+
 
 <style scoped>
 .modal-enter {

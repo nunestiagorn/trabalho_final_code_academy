@@ -107,16 +107,17 @@
       </div>
     </section>
 
-    <Modal :visivel="Visivel" @close="Visivel = false">
+    <Modal
+      :visivel="Visivel"
+      @close="Visivel = false"
+      @confirm="redirecionarLogin"
+    >
       <template #header>Sucesso</template>
       <template #body>
         <p>Usuário criado com sucesso!</p>
       </template>
-      <template #footer>
-        <RouterLink to="/login" @click="redirecionarLogin">Ok</RouterLink>
-      </template>
+      <template #footer></template>
     </Modal>
-
   </main>
 </template>
 
@@ -172,7 +173,7 @@ export default {
     redirecionarLogin() {
       this.Visivel = false;
       this.$router.push({ name: "login" });
-    }
+    },
   },
 };
 </script>

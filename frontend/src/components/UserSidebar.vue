@@ -30,7 +30,11 @@
           <FileText />
           Currículo
         </RouterLink>
-        <RouterLink to="/user-vagas" class="sidebar_item">
+        <RouterLink
+          to="/user-vagas"
+          class="bg-green-600 py-2.5 px-3 w-full flex items-center gap-1.5 rounded-lg cursor-pointer
+          hover:translate-x-2 transition-all hover:bg-emerald-700 hover:font-bold shadow-lg"
+        >
           <Handshake />
           Procurar Vagas
         </RouterLink>
