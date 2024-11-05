@@ -115,6 +115,8 @@
       <template #header>Sucesso</template>
       <template #body>
         <p>Usuário criado com sucesso!</p>
+        <img src="../../assets/images/maleta.png" alt="megafoce icon" class="absolute size-96 top-40 right-10 -rotate-[24deg]">
+        <img src="../../assets/images/maleta.png" alt="megafoce icon" class="absolute size-96 top-12 left-24 rotate-12">
       </template>
       <template #footer></template>
     </Modal>

@@ -104,7 +104,8 @@
     >
       <template #header>Sucesso</template>
       <template #body>
-        <p>Usuário criado com sucesso!</p>
+        <p>Seja bem-vindo(a) ao Pampa's RH!!!</p>
+        <img src="../../assets/images/caderno.png" alt="megafoce icon" class="absolute size-80 top-52 left-60 -rotate-[24deg]">
       </template>
       <template #footer></template>
     </Modal>
@@ -129,12 +130,8 @@ export default {
   data() {
     return {
       users: {
-        id: "",
-        name: "",
         email: "",
-        role: "",
         password: "",
-        id_companies: "",
       },
       userId: "",
       Visivel: false,
