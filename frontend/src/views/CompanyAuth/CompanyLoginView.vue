@@ -78,12 +78,30 @@
         Home
       </RouterLink>
     </div>
+
+    <Modal
+      :visivel="Visivel"
+      @close="Visivel = false"
+      @confirm="redirecionarLogin"
+    >
+      <template #header>Sucesso!</template>
+      <template #body>
+        <p>Seja bem-vindo(a) ao Pampa's RH!!!</p>
+        <img
+          src="../../assets/images/caderno.png"
+          alt="megafoce icon"
+          class="absolute size-80 top-52 left-60 -rotate-[24deg]"
+        />
+      </template>
+    </Modal>
+    
   </main>
 </template>
 
 <script>
 import { ref } from "vue";
 import { Building2, LockKeyhole, ArrowRight, ArrowLeft } from "lucide-vue-next";
+import Modal from "@/components/Modals/Modal.vue";
 
 import axios from "axios";
 
@@ -93,17 +111,19 @@ export default {
     LockKeyhole,
     ArrowRight,
     ArrowLeft,
+    Modal,
   },
   data() {
     return {
       companies: {
-        id: "",
         cnpj: "",
         password: "",
       },
       csrf: document.head.querySelector('meta[name="csrf-token"]')
         ? document.head.querySelector('meta[name="csrf-token"]').content
         : "",
+      companyId: "",
+      Visivel: false,
     };
   },
   methods: {
@@ -125,11 +145,11 @@ export default {
         .post(`http://localhost:8001/api/companies/login`, this.companies)
         .then(({ data }) => {
           try {
+            console.log(data);
             if (data.status === true) {
               this.companyId = data.company.id;
               localStorage.setItem("companyId", this.companyId);
-
-              this.$router.push({ name: "company-mainpage", params: { id: this.companyId } });
+              this.Visivel = true;
             } else {
               alert("Falha ao entrar na sua conta");
             }
@@ -138,6 +158,14 @@ export default {
             console.log(err);
           }
         });
+    },
+    redirecionarLogin() {
+      this.Visivel = false;
+
+      this.$router.push({
+        name: "company-mainpage",
+        params: { id: this.companyId },
+      });
     },
   },
 };

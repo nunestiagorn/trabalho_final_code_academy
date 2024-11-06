@@ -18,10 +18,6 @@
             <slot name="body">Modal Body</slot>
           </div>
 
-          <div class="">
-            <slot name="footer"></slot>
-          </div>
-
           <div class="flex justify-end gap-4 pr-4 pb-2">
             <button
               @click="confirmRedirection"
@@ -52,7 +48,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped>
 .modal-enter {

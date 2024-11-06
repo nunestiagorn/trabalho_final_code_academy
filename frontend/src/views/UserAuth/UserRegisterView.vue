@@ -115,11 +115,37 @@
       <template #header>Sucesso</template>
       <template #body>
         <p>Usuário criado com sucesso!</p>
-        <img src="../../assets/images/maleta.png" alt="megafoce icon" class="absolute size-96 top-40 right-10 -rotate-[24deg]">
-        <img src="../../assets/images/maleta.png" alt="megafoce icon" class="absolute size-96 top-12 left-24 rotate-12">
+        <img
+          src="../../assets/images/maleta.png"
+          alt="megafoce icon"
+          class="absolute size-96 top-40 right-10 -rotate-[24deg]"
+        />
+        <img
+          src="../../assets/images/maleta.png"
+          alt="megafoce icon"
+          class="absolute size-96 top-12 left-24 rotate-12"
+        />
       </template>
-      <template #footer></template>
     </Modal>
+
+    <ModalError :visivelError="VisivelError" @close="VisivelError = false">
+      <template #headerError>Falha</template>
+      <template #bodyError>
+        <p>Houve algum problema ao tentar criar sua conta :(</p>
+        <br />
+        <p>Tente Novamente!</p>
+        <img
+          src="../../assets/images/error.png"
+          alt="megafoce icon"
+          class="absolute size-80 top-24 right-36"
+        />
+        <img
+          src="../../assets/images/error.png"
+          alt="megafoce icon"
+          class="absolute size-80 bottom-16 left-36 -scale-x-100"
+        />
+      </template>
+    </ModalError>
   </main>
 </template>
 
@@ -133,7 +159,8 @@ import {
 } from "lucide-vue-next";
 
 import axios from "axios";
-import Modal from "@/components/Modal.vue";
+import Modal from "@/components/Modals/Modal.vue";
+import ModalError from "@/components/Modals/ModalError.vue";
 
 export default {
   name: "UserRegister",
@@ -144,6 +171,7 @@ export default {
     Mail,
     UserPlus,
     Modal,
+    ModalError,
   },
   data() {
     return {
@@ -154,6 +182,7 @@ export default {
         role: "candidate",
       },
       Visivel: false,
+      VisivelError: false,
     };
   },
   methods: {
@@ -164,7 +193,7 @@ export default {
           if (data.status === true) {
             this.Visivel = true;
           } else {
-            alert("Falha ao criar usuário");
+            this.VisivelError = true;
           }
         })
         .catch((err) => {

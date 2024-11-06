@@ -89,6 +89,27 @@
         Home
       </RouterLink>
     </div>
+
+    <Modal
+      :visivel="Visivel"
+      @close="Visivel = false"
+      @confirm="redirecionarLogin"
+    >
+      <template #header>Sucesso</template>
+      <template #body>
+        <p>Empresa cadastrada com êxito!</p>
+        <img
+          src="../../assets/images/maleta.png"
+          alt="megafoce icon"
+          class="absolute size-96 top-40 right-10 -rotate-[24deg]"
+        />
+        <img
+          src="../../assets/images/maleta.png"
+          alt="megafoce icon"
+          class="absolute size-96 top-12 left-24 rotate-12"
+        />
+      </template>
+    </Modal>
   </main>
 </template>
 
@@ -103,6 +124,7 @@ import {
 } from "lucide-vue-next";
 
 import axios from "axios";
+import Modal from "@/components/Modals/Modal.vue";
 
 export default {
   name: "CompanyRegister",
@@ -112,6 +134,7 @@ export default {
     ArrowRight,
     ArrowLeft,
     LockKeyhole,
+    Modal,
   },
   data() {
     return {
@@ -125,6 +148,7 @@ export default {
       csrf: document.head.querySelector('meta[name="csrf-token"]')
         ? document.head.querySelector('meta[name="csrf-token"]').content
         : "",
+      Visivel: false,
     };
   },
   methods: {
@@ -146,8 +170,7 @@ export default {
         .post(`http://localhost:8001/api/companies`, this.companies)
         .then(({ data }) => {
           if (data.status === true) {
-            alert("Empresa cadastrada com sucesso!");
-            this.$router.push({ name: "company-login" });
+            this.Visivel = true;
           } else {
             alert("Falha ao criar empresa");
           }
@@ -156,6 +179,10 @@ export default {
           console.error(err);
           alert("Erro ao criar empresa");
         });
+    },
+    redirecionarLogin() {
+      this.Visivel = false;
+      this.$router.push({ name: "company-login" });
     },
   },
 };

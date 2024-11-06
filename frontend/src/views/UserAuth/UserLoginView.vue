@@ -105,18 +105,44 @@
       <template #header>Sucesso</template>
       <template #body>
         <p>Seja bem-vindo(a) ao Pampa's RH!!!</p>
-        <img src="../../assets/images/caderno.png" alt="megafoce icon" class="absolute size-80 top-52 left-60 -rotate-[24deg]">
+        <img
+          src="../../assets/images/caderno.png"
+          alt="megafoce icon"
+          class="absolute size-80 top-52 left-60 -rotate-[24deg]"
+        />
       </template>
-      <template #footer></template>
     </Modal>
+
+    <ModalError
+      :visivelError="VisivelError"
+      @close="VisivelError = false"
+    >
+      <template #headerError>Falha</template>
+      <template #bodyError>
+        <p>Houve algum problema ao tentar acessar sua conta :(</p>
+        <br/>
+        <p>Tente Novamente!</p>
+        <img
+          src="../../assets/images/error.png"
+          alt="megafoce icon"
+          class="absolute size-80 top-24 right-36"
+        />
+        <img
+          src="../../assets/images/error.png"
+          alt="megafoce icon"
+          class="absolute size-80 bottom-16 left-36 -scale-x-100"
+        />
+      </template>
+    </ModalError>
   </main>
 </template>
 
 <script>
 import { ArrowLeft, ArrowRight, LockKeyhole, Mail } from "lucide-vue-next";
-import Modal from "@/components/Modal.vue";
 
 import axios from "axios";
+import Modal from "@/components/Modals/Modal.vue";
+import ModalError from "@/components/Modals/ModalError.vue";
 
 export default {
   name: "Login",
@@ -126,6 +152,7 @@ export default {
     LockKeyhole,
     Mail,
     Modal,
+    ModalError,
   },
   data() {
     return {
@@ -135,6 +162,7 @@ export default {
       },
       userId: "",
       Visivel: false,
+      VisivelError: false,
     };
   },
   methods: {
@@ -149,7 +177,7 @@ export default {
 
               this.Visivel = true;
             } else {
-              alert("Falha ao entrar na sua conta");
+              this.VisivelError = true;
             }
           } catch (err) {
             alert("Falha no sistema");
@@ -164,6 +192,9 @@ export default {
         params: { id: this.userId },
       });
     },
+    sairModal() {
+      this.VisivelError = false;
+    }
   },
 };
 </script>
