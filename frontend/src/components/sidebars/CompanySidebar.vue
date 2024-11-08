@@ -19,7 +19,7 @@
             class="flex flex-col gap-0.5 text-center mt-1.5 text-lg bg-white px-2.5 py-1 rounded-lg shadow-lg font-medium"
           >
             <p>Recrutador:</p>
-            <p>{{ company.recruiter }}</p>
+            <p>{{ company.recruiter_name }}</p>
           </div>
         </div>
       </div>
@@ -68,7 +68,7 @@
           <div class="flex flex-col gap-4">
             <p class="text-2xl font-bold">Altere o Recrutador:</p>
             <input
-              v-model="company.recruiter"
+              v-model="company.recruiter_name"
               class="p-2 rounded-lg outline-none shadow-lg"
               placeholder="Editar Recrutador..."
               maxlength="25"
@@ -76,6 +76,7 @@
           </div>
 
           <button
+            @click="saveRecruiter"
             type="submit"
             class="bg-secondaryColor shadow-lg self-end py-1 px-3 rounded-lg text-zinc-200 font-semibold hover:bg-darkBlue transition-all"
           >
@@ -101,7 +102,7 @@ export default {
         id: "",
         name: "",
         cnpj: "",
-        recruiter: "",
+        recruiter_name: "",
       },
       Visivel: false,
     };
@@ -116,8 +117,10 @@ export default {
       axios
         .get(`http://localhost:8001/api/companies/${companyId}`)
         .then(({ data }) => {
+          this.company.id = data.id;
           this.company.cnpj = data.cnpj;
           this.company.name = data.name;
+          this.company.recruiter_name = data.recruiter_name;
         })
         .catch((error) => {
           console.log(error);
@@ -128,6 +131,20 @@ export default {
     },
     abrirModal() {
       this.Visivel = true;
+    },
+    saveRecruiter() {
+      axios
+        .put(`http://localhost:8001/api/companies/${this.company.id}`, {
+          name: this.company.name,
+          recruiter_name: this.company.recruiter_name,
+        })
+        .then(() => {
+          this.Visivel = false;
+          alert("Recrutador atualizado com sucesso!");
+        })
+        .catch((error) => {
+          console.error("Erro ao atualizar recrutador:", error);
+        });
     },
   },
 };
