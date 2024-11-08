@@ -29,7 +29,7 @@ class UsersController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        // Criação do usuário
+        
         $user = Users::create([
             'name' => $req->name,
             'email' => $req->email,

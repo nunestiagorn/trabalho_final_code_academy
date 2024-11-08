@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('description');
             $table->foreignId('company_id')->nullable()->constrained('companies');
+            $table->string('recruiter_name')->nullable()->constrained('users');
             $table->timestamps();
         });
     }
