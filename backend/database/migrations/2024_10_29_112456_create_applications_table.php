@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained('users');
             $table->foreignId('opening_id')->nullable()->constrained('job_openings');
+            $table->string('recruiter_name')->nullable()->constrained('users');
             $table->timestamps();
         });
     }

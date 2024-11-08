@@ -16,7 +16,7 @@ class CompaniesController extends Controller
 
     public function store(Request $req)
     {
-        // Validação dos dados
+        
         $validator = Validator::make($req->all(), [
             'name' => 'required|string|max:255',
             //'cnpj' => 'required|string|max:20|unique:companies',
@@ -29,7 +29,6 @@ class CompaniesController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        // Criação do registro
         $company = Companies::create([
             'name' => $req->name,
             'cnpj' => $req->cnpj,
@@ -60,17 +59,17 @@ class CompaniesController extends Controller
 
     public function check(Request $request)
     {
-            // Valida o campo `cnpj` recebido na requisição
+        
             $credentials = $request->validate([
                 'cnpj' => ['required', 'string', 'max:20'],
                 'password' => ['required'],
             ]);
     
-            // Procura por uma empresa com o CNPJ especificado
+        
             $company = Companies::where('cnpj', $credentials['cnpj'])->first();
     
             if ($company) {
-                // Caso a empresa exista, retorna informações sobre ela
+                
                 return response()->json([
                     'status' => true,
                     'message' => "Empresa encontrada.",
@@ -83,7 +82,7 @@ class CompaniesController extends Controller
                 ], 200);
             }
     
-            // Caso a empresa não seja encontrada
+            
             return response()->json([
                 'status' => false,
                 'message' => "Empresa não encontrada."
