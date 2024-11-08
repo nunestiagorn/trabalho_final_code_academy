@@ -9,7 +9,10 @@
           class="flex flex-col transition-all bg-zinc-200 w-4/12 rounded-xl p-2 gap-8"
         >
           <div
-            class="bg-secondaryColor rounded-md text-zinc-200 font-bold px-4 py-2 text-2xl"
+            :class="[
+              'rounded-md text-zinc-200 font-bold px-4 py-2 text-2xl',
+              headerClass,
+            ]"
           >
             <slot name="header">Modal Header</slot>
           </div>
@@ -39,6 +42,10 @@ export default {
     visivel: {
       type: Boolean,
       required: true,
+    },
+    headerClass: {
+      type: String,
+      default: "",
     },
   },
   methods: {

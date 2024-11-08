@@ -101,48 +101,50 @@
       :visivel="Visivel"
       @close="Visivel = false"
       @confirm="redirecionarLogin"
+      :status="modalStatus"
+      :headerClass="
+        modalStatus === 'error' ? 'bg-red-500' : 'bg-secondaryColor'
+      "
     >
-      <template #header>Sucesso</template>
-      <template #body>
-        <p>Seja bem-vindo(a) ao Pampa's RH!!!</p>
-        <img
-          src="../../assets/images/caderno.png"
-          alt="megafoce icon"
-          class="absolute size-80 top-52 left-60 -rotate-[24deg]"
-        />
+      <template #header>
+        {{ modalStatus === "success" ? "Sucesso" : "Falha" }}
       </template>
-    </Modal>
-
-    <ModalError
-      :visivelError="VisivelError"
-      @close="VisivelError = false"
-    >
-      <template #headerError>Falha</template>
-      <template #bodyError>
-        <p>Houve algum problema ao tentar acessar sua conta :(</p>
-        <br/>
-        <p>Tente Novamente!</p>
+      <template #body>
+        <p>
+          {{
+            modalStatus === "success"
+              ? "Seja bem-vindo(a) ao Pampa's RH!!!"
+              : "Falha ao acessar a conta. Verifique as credenciais e tente novamente."
+          }}
+        </p>
         <img
-          src="../../assets/images/error.png"
-          alt="megafoce icon"
-          class="absolute size-80 top-24 right-36"
+          :src="modalStatus === 'success' ? successIcon : errorIcon"
+          alt="icon"
+          :class="[
+            modalStatus === 'success'
+              ? 'absolute size-80 top-52 left-60 -rotate-[24deg]'
+              : 'absolute size-80 top-24 right-36',
+          ]"
         />
+
         <img
+          v-if="modalStatus === 'error'"
           src="../../assets/images/error.png"
-          alt="megafoce icon"
+          alt="icon"
           class="absolute size-80 bottom-16 left-36 -scale-x-100"
         />
       </template>
-    </ModalError>
+    </Modal>
   </main>
 </template>
 
 <script>
 import { ArrowLeft, ArrowRight, LockKeyhole, Mail } from "lucide-vue-next";
+import successIcon from "@/assets/images/caderno.png";
+import errorIcon from "@/assets/images/error.png";
 
 import axios from "axios";
 import Modal from "@/components/Modals/Modal.vue";
-import ModalError from "@/components/Modals/ModalError.vue";
 
 export default {
   name: "Login",
@@ -152,7 +154,6 @@ export default {
     LockKeyhole,
     Mail,
     Modal,
-    ModalError,
   },
   data() {
     return {
@@ -162,7 +163,9 @@ export default {
       },
       userId: "",
       Visivel: false,
-      VisivelError: false,
+      modalStatus: "",
+      successIcon,
+      errorIcon,
     };
   },
   methods: {
@@ -171,13 +174,12 @@ export default {
         .post(`http://localhost:8001/api/users/login`, this.users)
         .then(({ data }) => {
           try {
-            if (data.status === true) {
+            this.modalStatus = data.status ? "success" : "error";
+            this.Visivel = true;
+
+            if (data.status) {
               this.userId = data.user.id;
               localStorage.setItem("userId", this.userId);
-
-              this.Visivel = true;
-            } else {
-              this.VisivelError = true;
             }
           } catch (err) {
             alert("Falha no sistema");
@@ -187,14 +189,13 @@ export default {
     redirecionarLogin() {
       this.Visivel = false;
 
-      this.$router.push({
-        name: "mainpage",
-        params: { id: this.userId },
-      });
+      if (this.modalStatus === "success") {
+        this.$router.push({
+          name: "mainpage",
+          params: { id: this.userId },
+        });
+      }
     },
-    sairModal() {
-      this.VisivelError = false;
-    }
   },
 };
 </script>
