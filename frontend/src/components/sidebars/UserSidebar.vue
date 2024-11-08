@@ -22,7 +22,7 @@
       class="flex flex-col justify-between h-full w-full px-4 font-semibold text-zinc-200 text-lg"
     >
       <div class="flex flex-col gap-5">
-        <RouterLink to="/editar_perfil" class="user_sidebar_item">
+        <RouterLink to="/edit_profile" class="user_sidebar_item">
           <UserCog />
           Editar Perfil
         </RouterLink>

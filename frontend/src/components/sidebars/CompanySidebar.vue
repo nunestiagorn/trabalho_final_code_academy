@@ -8,11 +8,19 @@
           alt="foto da empresa"
           class="size-16 rounded-full"
         />
-        <div class="flex flex-col text-black capitalize items-center">
-          <h2 class="font-bold text-xl">
+        <div
+          class="-mt-1.5 flex flex-col text-black capitalize items-center gap-1"
+        >
+          <h2 class="font-bold text-xl underline underline-offset-4">
             {{ company.name }}
           </h2>
-          <h2 class="text-lg">Recrutador: Moaca</h2>
+
+          <div
+            class="flex flex-col gap-0.5 text-center mt-1.5 text-lg bg-white px-2.5 py-1 rounded-lg shadow-lg font-medium"
+          >
+            <p>Recrutador:</p>
+            <p>{{ company.recruiter }}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -23,14 +31,19 @@
       class="flex flex-col justify-between h-full w-full px-4 font-semibold text-zinc-200 text-lg"
     >
       <div class="flex flex-col gap-5">
-        <RouterLink to="/editar_perfil" class="company_sidebar_item">
+        <button @click.prevent="abrirModal()" class="company_sidebar_item">
           <UserCog />
           Editar Recrutador
-        </RouterLink>
+        </button>
 
-        <RouterLink to="/editar_perfil" class="company_sidebar_item">
+        <RouterLink to="/publish" class="company_sidebar_item">
           <Grid2x2Plus />
           Publicar Vaga
+        </RouterLink>
+
+        <RouterLink to="/help" class="company_sidebar_item">
+          <Info />
+          Ajuda
         </RouterLink>
       </div>
 
@@ -45,22 +58,52 @@
         </RouterLink>
       </div>
     </section>
+
+    <ModalRecruiter :visivel="Visivel" @close="Visivel = false">
+      <template #headerRecruiter>
+        Editar o Recrutador da empresa: {{ company.name }}
+      </template>
+      <template #bodyRecruiter>
+        <div class="flex flex-col gap-4">
+          <div class="flex flex-col gap-4">
+            <p class="text-2xl font-bold">Altere o Recrutador:</p>
+            <input
+              v-model="company.recruiter"
+              class="p-2 rounded-lg outline-none shadow-lg"
+              placeholder="Editar Recrutador..."
+              maxlength="25"
+            />
+          </div>
+
+          <button
+            type="submit"
+            class="bg-secondaryColor shadow-lg self-end py-1 px-3 rounded-lg text-zinc-200 font-semibold hover:bg-darkBlue transition-all"
+          >
+            Salvar
+          </button>
+        </div>
+      </template>
+    </ModalRecruiter>
   </aside>
 </template>
 
 <script>
-import { Bug, LogOut, UserCog, Grid2x2Plus } from "lucide-vue-next";
+import { Bug, LogOut, UserCog, Grid2x2Plus, Info } from "lucide-vue-next";
 import axios from "axios";
 import { RouterLink } from "vue-router";
+import ModalRecruiter from "@/components/Modals/RecruiterModal.vue";
 
 export default {
-  components: { Bug, LogOut, UserCog, Grid2x2Plus },
+  components: { Bug, LogOut, UserCog, Grid2x2Plus, Info, ModalRecruiter },
   data() {
     return {
       company: {
+        id: "",
         name: "",
         cnpj: "",
+        recruiter: "",
       },
+      Visivel: false,
     };
   },
   mounted() {
@@ -81,9 +124,10 @@ export default {
         });
     },
     Sair() {
-      const companyId = this.$route.params.id;
-
       localStorage.removeItem("companyId");
+    },
+    abrirModal() {
+      this.Visivel = true;
     },
   },
 };
