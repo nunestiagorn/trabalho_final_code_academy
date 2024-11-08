@@ -33,7 +33,7 @@
         <h1 class="text-title font-bold drop-shadow-textShadow2">
           Seja Bem-Vindo(a)!!!
         </h1>
-        <h2 class="w-10/12 font-medium text-xl drop-shadow-textShadow">
+        <h2 class="w-10/12 font-medium text-xl drop-shadow-textShadow -mt-4">
           Nós somos a Pampa's RH, o melhor sistema de gerenciamento e procura de
           vagas disponível no mercado!
         </h2>

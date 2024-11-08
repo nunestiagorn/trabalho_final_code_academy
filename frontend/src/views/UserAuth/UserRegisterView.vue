@@ -111,12 +111,39 @@
       :visivel="Visivel"
       @close="Visivel = false"
       @confirm="redirecionarLogin"
+      :status="modalStatus"
+      :headerClass="
+        modalStatus === 'error' ? 'bg-red-500' : 'bg-secondaryColor'
+      "
     >
-      <template #header>Sucesso</template>
-      <template #body>
-        <p>Usuário criado com sucesso!</p>
+      <template #header>
+        {{ modalStatus === "success" ? "Sucesso" : "Falha" }}
       </template>
-      <template #footer></template>
+      <template #body>
+        <p>
+          {{
+            modalStatus === "success"
+              ? "Sua conta foi criada com sucesso!!!"
+              : "Falha ao acessar a conta. Verifique as credenciais e tente novamente."
+          }}
+        </p>
+        <img
+          :src="modalStatus === 'success' ? successIcon : errorIcon"
+          alt="icon"
+          :class="[
+            modalStatus === 'success'
+              ? 'absolute size-80 top-52 left-60 -rotate-[24deg]'
+              : 'absolute size-80 top-24 right-36',
+          ]"
+        />
+
+        <img
+          v-if="modalStatus === 'error'"
+          src="../../assets/images/error.png"
+          alt="icon"
+          class="absolute size-80 bottom-16 left-36 -scale-x-100"
+        />
+      </template>
     </Modal>
   </main>
 </template>
@@ -129,9 +156,11 @@ import {
   Mail,
   UserPlus,
 } from "lucide-vue-next";
+import successIcon from "@/assets/images/caderno.png";
+import errorIcon from "@/assets/images/error.png";
 
 import axios from "axios";
-import Modal from "@/components/Modal.vue";
+import Modal from "@/components/Modals/Modal.vue";
 
 export default {
   name: "UserRegister",
@@ -152,6 +181,9 @@ export default {
         role: "candidate",
       },
       Visivel: false,
+      modalStatus: "",
+      successIcon,
+      errorIcon,
     };
   },
   methods: {
@@ -159,20 +191,20 @@ export default {
       axios
         .post(`http://localhost:8001/api/users`, this.users)
         .then(({ data }) => {
-          if (data.status === true) {
+          try {
+            this.modalStatus = data.status ? "success" : "error";
             this.Visivel = true;
-          } else {
-            alert("Falha ao criar usuário");
+          } catch (err) {
+            alert("Falha no sistema");
           }
-        })
-        .catch((err) => {
-          console.error(err);
-          alert("Erro ao criar usuário");
         });
     },
     redirecionarLogin() {
       this.Visivel = false;
-      this.$router.push({ name: "login" });
+
+      if (this.modalStatus === "success") {
+        this.$router.push({ name: "login" });
+      }
     },
   },
 };

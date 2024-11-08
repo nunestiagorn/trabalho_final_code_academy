@@ -2,24 +2,23 @@
   <transition name="modal">
     <div
       v-if="visivel"
-      class="fixed z-50 top-0 left-0 w-full h-full transition-all bg-black/65"
+      class="fixed z-50 top-0 left-0 w-full h-full transition-all bg-black/75"
     >
       <div class="flex items-center justify-center h-full">
         <div
-          class="flex flex-col transition-all bg-zinc-200 w-96 rounded-xl p-2 gap-8"
+          class="flex flex-col transition-all bg-zinc-200 w-4/12 rounded-xl p-2 gap-8"
         >
           <div
-            class="bg-secondaryColor rounded-md text-zinc-200 font-bold px-4 py-2 text-2xl"
+            :class="[
+              'rounded-md text-zinc-200 font-bold px-4 py-2 text-2xl',
+              headerClass,
+            ]"
           >
             <slot name="header">Modal Header</slot>
           </div>
 
-          <div class="px-8 text-black">
+          <div class="px-10 text-black text-2xl font-medium">
             <slot name="body">Modal Body</slot>
-          </div>
-
-          <div class="">
-            <slot name="footer"></slot>
           </div>
 
           <div class="flex justify-end gap-4 pr-4 pb-2">
@@ -44,6 +43,10 @@ export default {
       type: Boolean,
       required: true,
     },
+    headerClass: {
+      type: String,
+      default: "",
+    },
   },
   methods: {
     confirmRedirection() {
@@ -52,7 +55,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped>
 .modal-enter {

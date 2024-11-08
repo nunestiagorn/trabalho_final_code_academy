@@ -16,6 +16,11 @@ const router = createRouter({
       component: () => import("../views/ComplementViews/AboutView.vue"),
     },
     {
+      path: "/contact",
+      name: "contact",
+      component: () => import("../views/ComplementViews/ContactView.vue"),
+    },
+    {
       path: "/login",
       name: "login",
       component: () => import("../views/UserAuth/UserLoginView.vue"),

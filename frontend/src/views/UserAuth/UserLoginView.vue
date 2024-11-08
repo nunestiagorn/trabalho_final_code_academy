@@ -101,21 +101,50 @@
       :visivel="Visivel"
       @close="Visivel = false"
       @confirm="redirecionarLogin"
+      :status="modalStatus"
+      :headerClass="
+        modalStatus === 'error' ? 'bg-red-500' : 'bg-secondaryColor'
+      "
     >
-      <template #header>Sucesso</template>
-      <template #body>
-        <p>Usuário criado com sucesso!</p>
+      <template #header>
+        {{ modalStatus === "success" ? "Sucesso" : "Falha" }}
       </template>
-      <template #footer></template>
+      <template #body>
+        <p>
+          {{
+            modalStatus === "success"
+              ? "Seja bem-vindo(a) ao Pampa's RH!!!"
+              : "Falha ao acessar a conta. Verifique as credenciais e tente novamente."
+          }}
+        </p>
+        <img
+          :src="modalStatus === 'success' ? successIcon : errorIcon"
+          alt="icon"
+          :class="[
+            modalStatus === 'success'
+              ? 'absolute size-80 top-52 left-60 -rotate-[24deg]'
+              : 'absolute size-80 top-24 right-36',
+          ]"
+        />
+
+        <img
+          v-if="modalStatus === 'error'"
+          src="../../assets/images/error.png"
+          alt="icon"
+          class="absolute size-80 bottom-16 left-36 -scale-x-100"
+        />
+      </template>
     </Modal>
   </main>
 </template>
 
 <script>
 import { ArrowLeft, ArrowRight, LockKeyhole, Mail } from "lucide-vue-next";
-import Modal from "@/components/Modal.vue";
+import successIcon from "@/assets/images/caderno.png";
+import errorIcon from "@/assets/images/error.png";
 
 import axios from "axios";
+import Modal from "@/components/Modals/Modal.vue";
 
 export default {
   name: "Login",
@@ -129,15 +158,14 @@ export default {
   data() {
     return {
       users: {
-        id: "",
-        name: "",
         email: "",
-        role: "",
         password: "",
-        id_companies: "",
       },
       userId: "",
       Visivel: false,
+      modalStatus: "",
+      successIcon,
+      errorIcon,
     };
   },
   methods: {
@@ -146,13 +174,12 @@ export default {
         .post(`http://localhost:8001/api/users/login`, this.users)
         .then(({ data }) => {
           try {
-            if (data.status === true) {
+            this.modalStatus = data.status ? "success" : "error";
+            this.Visivel = true;
+
+            if (data.status) {
               this.userId = data.user.id;
               localStorage.setItem("userId", this.userId);
-
-              this.Visivel = true;
-            } else {
-              alert("Falha ao entrar na sua conta");
             }
           } catch (err) {
             alert("Falha no sistema");
@@ -162,10 +189,12 @@ export default {
     redirecionarLogin() {
       this.Visivel = false;
 
-      this.$router.push({
-        name: "mainpage",
-        params: { id: this.userId },
-      });
+      if (this.modalStatus === "success") {
+        this.$router.push({
+          name: "mainpage",
+          params: { id: this.userId },
+        });
+      }
     },
   },
 };
