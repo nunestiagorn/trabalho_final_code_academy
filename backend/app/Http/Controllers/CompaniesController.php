@@ -20,7 +20,7 @@ class CompaniesController extends Controller
 
         $validator = Validator::make($req->all(), [
             'name' => 'required|string|max:255',
-            //'cnpj' => 'required|string|max:20|unique:companies',
+            'cnpj' => 'required|string|max:20|unique:companies',
             'description' => 'required|string|max:500',
             //'password' => 'required|string|min:8|confirmed',
         ]);
@@ -76,7 +76,7 @@ class CompaniesController extends Controller
 
         $company = Companies::where('cnpj', $credentials['cnpj'])->first();
 
-        if ($company) {
+        if ($company && Hash::check($credentials['password'], $company->password)) {
 
             return response()->json([
                 'status' => true,
