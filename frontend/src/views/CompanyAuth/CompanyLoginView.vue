@@ -84,7 +84,9 @@
       @close="Visivel = false"
       @confirm="redirecionarLogin"
     >
-      <template #header>Sucesso!</template>
+      <template #header>
+        <p class="text-black">Sucesso!!!</p>
+      </template>
       <template #body>
         <p>Seja bem-vindo(a) ao Pampa's RH!!!</p>
         <img

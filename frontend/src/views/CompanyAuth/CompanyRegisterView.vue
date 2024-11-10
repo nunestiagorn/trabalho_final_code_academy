@@ -51,6 +51,11 @@
                 class="input2"
                 placeholder="Senha"
               />
+
+              <input
+                v-model="companies.recruiter_name"
+                type="hidden"
+              />
             </div>
           </div>
 
@@ -144,6 +149,7 @@ export default {
         cnpj: "",
         password: "",
         description: "Adicione uma descrição à sua empresa!",
+        recruiter_name: "",
       },
       csrf: document.head.querySelector('meta[name="csrf-token"]')
         ? document.head.querySelector('meta[name="csrf-token"]').content
@@ -169,6 +175,7 @@ export default {
       axios
         .post(`http://localhost:8001/api/companies`, this.companies)
         .then(({ data }) => {
+          console.log(data);
           if (data.status === true) {
             this.Visivel = true;
           } else {
