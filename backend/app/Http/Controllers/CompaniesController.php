@@ -98,9 +98,6 @@ class CompaniesController extends Controller
     }
 
 
-
-
-
     public function show($id)
     {
         $user = Companies::find($id);
