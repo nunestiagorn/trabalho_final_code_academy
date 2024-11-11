@@ -27,8 +27,9 @@ Route::post('companies/login', [CompaniesController::class, "check"]);
 //rotas de vagas
 Route::get('job_openings', [JobOpeningsController::class, "index"]);
 Route::post('job_openings', [JobOpeningsController::class, "store"]);
+Route::get('job_openings/{id}', [JobOpeningsController::class, 'show']);
 Route::put('job_openings/{id}', [JobOpeningsController::class, "update"]);
-Route::get('job_openings/{id}', [JobOpeningsController::class, "show"]);
+// Route::get('job_openings/{id}', [JobOpeningsController::class, "show"]);
 Route::delete('job_openings/{id}', [JobOpeningsController::class, "delete"]);
 Route::post('job_openings/login', [JobOpeningsController::class, "check"]);
 

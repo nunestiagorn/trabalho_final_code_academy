@@ -38,7 +38,7 @@
           <Handshake />
           Procurar Vagas
         </RouterLink>
-        <RouterLink to="/123" class="user_sidebar_item">
+        <RouterLink to="/company-list" class="user_sidebar_item">
           <Building2 />
           Empresas
         </RouterLink>
