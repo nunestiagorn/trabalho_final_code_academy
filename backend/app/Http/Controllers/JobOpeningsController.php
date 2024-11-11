@@ -56,15 +56,26 @@ class JobOpeningsController extends Controller
 
     }
 
-    public function show($id){
-        $user = Job_openings::find($id);
+    public function show($companyId) {
+        $jobs = Job_openings::where('company_id', $companyId)->get();
 
-        if (!$user) {
-            return response()->json(['message' => 'Usuário não encontrado'], 404);
+        if ($jobs->isEmpty()) {
+            return response()->json(['message' => 'Nenhuma vaga encontrada para essa empresa'], 404);
         }
 
-        return response()->json($user, 200);
+        return response()->json($jobs, 200);
     }
+
+
+    // public function show($id){
+    //     $user = Job_openings::find($id);
+
+    //     if (!$user) {
+    //         return response()->json(['message' => 'Usuário não encontrado'], 404);
+    //     }
+
+    //     return response()->json($user, 200);
+    // }
 
     public function delete(Request $req){
         $opening = Job_openings::find($req->id);
