@@ -142,7 +142,7 @@
       <template #bodyJob>
         <div class="flex flex-col gap-4">
           <div class="flex flex-col gap-4">
-            <!-- <p class="text-2xl font-bold">Insira o título da Vaga</p>
+            <p class="text-2xl font-bold">Insira o título da Vaga</p>
             <input
               v-model="job.name"
               class="p-2 rounded-lg outline-none shadow-lg"
@@ -155,20 +155,19 @@
               class="p-2 rounded-lg outline-none shadow-lg"
               placeholder="Descrição da vaga..."
               maxlength="300"
-            /> -->
+            />
           </div>
 
           <button
             @click="saveJob"
             type="submit"
-            class="bg-secondaryColor active:scale-75 shadow-lg self-end py-1 px-3 rounded-lg text-zinc-200 font-semibold hover:bg-darkBlue transition-all"
+            class="bg-green-600 active:scale-75 shadow-lg self-end py-1 px-3 rounded-lg text-zinc-200 font-semibold hover:bg-emerald-700 transition-all"
           >
-            Salvar
+            Publicar
           </button>
         </div>
       </template>
     </ModalJob>
-
   </aside>
 </template>
 
@@ -208,6 +207,13 @@ export default {
         description: "",
         recruiter_name: "",
       },
+      job: {
+        id: "",
+        name: "",
+        description: "",
+        company_id: "",
+        recruiter_name: "",
+      },
       VisivelRecruiter: false,
       VisivelCompany: false,
       VisivelJob: false,
@@ -223,11 +229,13 @@ export default {
       axios
         .get(`http://localhost:8001/api/companies/${companyId}`)
         .then(({ data }) => {
-          this.company.id = data.id;
-          this.company.cnpj = data.cnpj;
-          this.company.name = data.name;
-          this.company.recruiter_name = data.recruiter_name;
-          this.company.description = data.description;
+          this.company = {
+            id: data.id,
+            cnpj: data.cnpj,
+            name: data.name,
+            recruiter_name: data.recruiter_name,
+            description: data.description,
+          };
         })
         .catch((error) => {
           console.log(error);
@@ -244,6 +252,13 @@ export default {
     },
     abrirModalJob() {
       this.VisivelJob = true;
+      this.job = {
+        id: "",
+        name: "",
+        description: "",
+        company_id: this.company.id,
+        recruiter_name: this.company.recruiter_name,
+      };
     },
     saveRecruiter() {
       axios
@@ -264,13 +279,18 @@ export default {
           console.error("Erro ao atualizar a empresa:", error);
         });
     },
-    // saveJob() {
-    //   axios
-    //   .put(`http://localhost:8001/api/companies/${this.company.id}`, {
-    //     name: this.job.name,
-    //     description: this.job.description,
-    //   })
-    // }
+    saveJob() {
+      axios
+        .post(`http://localhost:8001/api/job_openings/`, {
+          name: this.job.name,
+          description: this.job.description,
+          company_id: this.company.id,
+          recruiter_name: this.company.recruiter_name,
+        })
+        .catch((error) => {
+          console.error("Erro ao criar vaga:", error);
+        });
+    },
   },
 };
 </script>

@@ -28,6 +28,9 @@ class JobOpeningsController extends Controller
 
         $opening = Job_openings::create([
             'name' => $req->name,
+            'description' => $req->description,
+            'company_id' => $req->company_id,
+            'recruiter_name' => $req->recruiter_name,
         ]);
 
         return response()->json([
@@ -49,7 +52,7 @@ class JobOpeningsController extends Controller
     }
 
     public function check(Request $req){
-        
+
 
     }
 
