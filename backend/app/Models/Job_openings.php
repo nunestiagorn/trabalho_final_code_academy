@@ -11,5 +11,6 @@ class Job_openings extends Model
 
     protected $fillable = [
         'name',
+        'description'
     ];
 }

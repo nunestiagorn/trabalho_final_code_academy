@@ -62,7 +62,7 @@ class CompaniesController extends Controller
 
         $company->save();
 
-        return response("Tudo certo", 200);
+        return response("Success", 200);
     }
 
     public function check(Request $request)
@@ -100,20 +100,25 @@ class CompaniesController extends Controller
 
     public function show($id)
     {
-        $user = Companies::find($id);
+        $company = Companies::find($id);
 
-        if (!$user) {
+        if (!$company) {
             return response()->json(['message' => 'Compania não encontrado'], 404);
         }
 
-        return response()->json($user, 200);
+        return response()->json($company, 200);
     }
 
     public function delete(Request $req)
     {
-        $user = Companies::find($req->id);
+        $company = Companies::find($req->id);
 
-        $user->delete();
-        return response("Compania apagada", 200);
+        if (!$company) {
+            return response()->json(['message' => 'Compania não encontrado'], 404);
+        }
+
+        $company->delete();
+
+        return response()->json(['message' => 'Deletado com sucesso'], 200);
     }
 }
