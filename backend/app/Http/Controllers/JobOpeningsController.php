@@ -4,31 +4,75 @@ namespace App\Http\Controllers;
 
 use App\Models\Job_openings;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class JobOpeningsController extends Controller
 {
-    //
+    //'
     public function index(){
         return Job_openings::all();
     }
 
     public function store(Request $req){
-        Job_openings::create([
-            "name" => $req->name
+
+        $validator = Validator::make($req->all(), [
+            'name' => 'required|string|max:50',
+            'description' => 'required|string|max:300',
+
         ]);
 
-        return response(["OK"], 200);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        $opening = Job_openings::create([
+            'name' => $req->name,
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => "Registration Success",
+        ]);
     }
 
     public function update(Request $req){
         $opening = Job_openings::find($req->id);
 
-        $opening->name = $req->name;
+        $opening->name = $req->name ?? $opening->name;
+        $opening->description = $req->description ?? $opening->description;
+
 
         $opening->save();
 
-        return response("Tudo certo", 200);
+        return response("Success", 200);
+    }
+
+    public function check(Request $req){
+        
+
+    }
+
+    public function show($id){
+        $user = Job_openings::find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'Usuário não encontrado'], 404);
+        }
+
+        return response()->json($user, 200);
+    }
+
+    public function delete(Request $req){
+        $opening = Job_openings::find($req->id);
+
+        if (!$opening) {
+            return response()->json(['message' => 'Não encontrado'], 404);
+        }
+
+        $opening->delete();
+
+        return response()->json(['message' => 'Deletado com sucesso'], 200);
     }
 
 }

@@ -28,5 +28,18 @@ Route::post('companies/login', [CompaniesController::class, "check"]);
 Route::get('job_openings', [JobOpeningsController::class, "index"]);
 Route::post('job_openings', [JobOpeningsController::class, "store"]);
 Route::put('job_openings/{id}', [JobOpeningsController::class, "update"]);
+Route::get('job_openings/{id}', [JobOpeningsController::class, "show"]);
+Route::delete('job_openings/{id}', [JobOpeningsController::class, "delete"]);
+Route::post('job_openings/login', [JobOpeningsController::class, "check"]);
 
+
+
+//rotas de aplicações
 Route::get('applications', [ApplicationsController::class, "index"]);
+Route::post('applications', [ApplicationsController::class, "store"]);
+Route::put('applications/{id}', [ApplicationsController::class, "update"]);
+Route::get('applications/{id}', [ApplicationsController::class, "show"]);
+Route::delete('applications/{id}', [ApplicationsController::class, "delete"]);
+Route::post('applications/login', [ApplicationsController::class, "check"]);
+
+
