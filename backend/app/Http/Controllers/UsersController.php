@@ -17,9 +17,8 @@ class UsersController extends Controller
 
     public function store(Request $req)
     {
-        // Validação dos dados
         $validator = Validator::make($req->all(), [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:50',
             'email' => 'required|string|email|max:255|unique:users',
             'role' => 'required|in:admin,recruiter,candidate',
             //'password' => 'required|string|min:8|confirmed',
@@ -101,7 +100,12 @@ class UsersController extends Controller
     {
         $user = Users::find($req->id);
 
+        if (!$user) {
+            return response()->json(['message' => 'Usuário não encontrado'], 404);
+        }
+
         $user->delete();
-        return response("Usuário apagado", 200);
+
+        return response()->json(['message' => 'Deletado com sucesso'], 200);
     }
 }

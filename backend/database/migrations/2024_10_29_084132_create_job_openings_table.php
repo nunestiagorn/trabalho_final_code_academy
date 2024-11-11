@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('description');
+            $table->enum('status', ['approved', 'repproved', 'pending'])->default('pending');;
             $table->foreignId('company_id')->nullable()->constrained('companies');
             $table->string('recruiter_name')->nullable()->constrained('users');
             $table->timestamps();
