@@ -5,7 +5,7 @@
         <img
           src="@/assets/images/user.png"
           alt="foto do usuário"
-          class="size-14 rounded-full"
+          class="w-14 h-14 rounded-full"
         />
         <div class="flex flex-col">
           <h2 class="text-black text-xl font-bold capitalize">
@@ -31,9 +31,8 @@
           Currículo
         </RouterLink>
         <RouterLink
-          to="/user-vagas"
-          class="bg-green-600 py-2.5 px-3 w-full flex items-center gap-1.5 rounded-lg cursor-pointer
-          hover:translate-x-2 transition-all hover:bg-emerald-700 hover:font-bold shadow-lg"
+          :to="`/${userId}/vacancies`"
+          class="bg-green-600 py-2.5 px-3 w-full flex items-center gap-1.5 rounded-lg cursor-pointer hover:translate-x-2 transition-all hover:bg-emerald-700 hover:font-bold shadow-lg"
         >
           <Handshake />
           Procurar Vagas
@@ -49,10 +48,10 @@
       </div>
 
       <div class="flex gap-2">
-        <RouterLink @click="Sair()" to="/" class="sidebar_item_exit">
+        <button @click="Sair" class="sidebar_item_exit">
           <LogOut />
           Sair
-        </RouterLink>
+        </button>
         <RouterLink to="/bug_report" class="sidebar_item_exit">
           <Bug />
           Bug
@@ -65,7 +64,6 @@
 <script>
 import {
   Bug,
-  ChevronLeft,
   FileText,
   Handshake,
   Info,
@@ -79,7 +77,6 @@ import { RouterLink } from "vue-router";
 
 export default {
   components: {
-    ChevronLeft,
     LogOut,
     UserCog,
     Bug,
@@ -99,6 +96,11 @@ export default {
   mounted() {
     this.LoggedUser();
   },
+  computed: {
+    userId() {
+      return localStorage.getItem("userId");
+    },
+  },
   methods: {
     LoggedUser() {
       const userId = this.$route.params.id;
@@ -109,13 +111,12 @@ export default {
           this.user.email = data.email;
         })
         .catch((error) => {
-          console.log(error);
+          console.error("Erro ao buscar usuário:", error);
         });
     },
     Sair() {
-      const userId = this.$route.params.id;
-
       localStorage.removeItem("userId");
+      this.$router.push("/");
     },
   },
 };
