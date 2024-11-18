@@ -28,7 +28,7 @@ class UsersController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        
+
         $user = Users::create([
             'name' => $req->name,
             'email' => $req->email,
@@ -47,9 +47,9 @@ class UsersController extends Controller
     {
         $user = Users::find($req->id);
 
-        $user->name = $req->name;
-        $user->email = $req->email;
-        $user->password = $req->password;
+        $user->name = $req->name ?? $user->name;
+        $user->email = $req->email ?? $user->email;
+        $user->password = $req->password ?? $user->password;
 
         $user->save();
 

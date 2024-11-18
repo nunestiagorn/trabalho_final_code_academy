@@ -22,10 +22,10 @@
       class="flex flex-col justify-between h-full w-full px-4 font-semibold text-zinc-200 text-lg"
     >
       <div class="flex flex-col gap-5">
-        <RouterLink to="/edit_profile" class="user_sidebar_item">
+        <button @click.prevent="abirModalUser()" class="user_sidebar_item">
           <UserCog />
           Editar Perfil
-        </RouterLink>
+        </button>
         <RouterLink to="/123" class="user_sidebar_item">
           <FileText />
           Currículo
@@ -58,6 +58,36 @@
         </RouterLink>
       </div>
     </section>
+
+    <ModalUser
+      :visivel="VisivelUser"
+      @close="VisivelUser = false"
+    >
+      <template #headerUser>
+        Editar o Recrutador da empresa: {{ user.name }}
+      </template>
+      <template #bodyUser>
+        <div class="flex flex-col gap-4">
+          <div class="flex flex-col gap-4">
+            <p class="text-2xl font-bold">Altere o seu nome:</p>
+            <input
+              v-model="user.name"
+              class="p-2 rounded-lg outline-none shadow-lg"
+              placeholder="Editar nome..."
+              maxlength="25"
+            />
+          </div>
+
+          <button
+            @click="saveUser"
+            type="submit"
+            class="bg-secondaryColor active:scale-75 shadow-lg self-end py-1 px-3 rounded-lg text-zinc-200 font-semibold hover:bg-darkBlue transition-all"
+          >
+            Salvar
+          </button>
+        </div>
+      </template>
+    </ModalUser>
   </aside>
 </template>
 
@@ -71,6 +101,7 @@ import {
   UserCog,
   Building2,
 } from "lucide-vue-next";
+import ModalUser from '../Modals/UserModal.vue'
 
 import axios from "axios";
 import { RouterLink } from "vue-router";
@@ -84,6 +115,7 @@ export default {
     Handshake,
     Info,
     Building2,
+    ModalUser,
   },
   data() {
     return {
@@ -91,6 +123,7 @@ export default {
         name: "",
         email: "",
       },
+      VisivelUser: false,
     };
   },
   mounted() {
@@ -112,6 +145,19 @@ export default {
         })
         .catch((error) => {
           console.error("Erro ao buscar usuário:", error);
+        });
+    },
+    abirModalUser() {
+      this.VisivelUser = true;
+    },
+    saveUser() {
+      const testeId = this.$route.params.id;
+      axios
+        .put(`http://localhost:8001/api/users/${testeId}`, {
+          name: this.user.name,
+        })
+        .catch((error) => {
+          console.error("Erro ao atualizar usuário:", error);
         });
     },
     Sair() {

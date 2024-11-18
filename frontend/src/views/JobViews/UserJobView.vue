@@ -1,6 +1,6 @@
 <template>
   <main class="h-screen flex justify-between bg-cover-main">
-    <div class="flex font-bold text-lg absolute top-4 left-4">
+    <div class="flex font-bold text-lg absolute top-5 left-5">
       <RouterLink
         to="/:id/mainpage"
         class="pl-3 pr-4 py-2.5 hover:text-zinc-300 bg-darkBlue rounded-[100px] hover:bg-darkerBlue transition-all items-center duration-150 shadow-xl flex gap-0.5 hover:rounded-xl"
@@ -76,6 +76,22 @@
           </p>
         </div>
       </template>
+
+      <template #buttonsJobDetail>
+        <button
+          type="submit"
+          @click.prevent="candidatar"
+          class="bg-green-600 active:scale-75 shadow-lg py-1 px-3 text-lg rounded-lg text-zinc-200 font-semibold hover:bg-emerald-700 transition-all"
+        >
+          Aplicar Vaga
+        </button>
+        <button
+          @click.prevent="closeModal"
+          class="bg-primaryColor p-1.5 px-2.5 rounded-lg shadow-lg text-lg text-zinc-200 font-semibold hover:bg-darkBlue transition-all"
+        >
+          Fechar
+        </button>
+      </template>
     </ModalJobDetail>
   </main>
 </template>
@@ -131,6 +147,27 @@ export default {
     abrirModalJobDetails(job) {
       this.selectedJob = job;
       this.VisivelJobDetail = true;
+    },
+    closeModal() {
+      this.VisivelJobDetail = false;
+    },
+    candidatar() {
+      try {
+        const userId = this.$route.params.id;
+        const job = this.selectedJob;
+
+        axios.post(`http://localhost:8001/api/applications/`, {
+          user_id: userId,
+          opening_id: job.id,
+          company_id: job.company_id,
+          recruiter_name: job.recruiter,
+        });
+
+        alert("Candidatura enviada com sucesso!");
+      } catch (error) {
+        console.log(error);
+        alert("Erro na candidatura");
+      }
     },
   },
 };
