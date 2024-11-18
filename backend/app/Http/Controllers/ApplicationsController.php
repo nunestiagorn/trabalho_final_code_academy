@@ -15,7 +15,10 @@ class ApplicationsController extends Controller
 
     public function store(Request $req){
         $application = new Applications;
+        $application->user_id = $req->user_id;
+        $application->company_id = $req->company_id;
         $application->recruiter_name = $req->recruiter_name;
+        $application->opening_id = $req->opening_id;
         $application->save();
 
         return response("Success", 200);

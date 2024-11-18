@@ -38,19 +38,33 @@ const router = createRouter({
     {
       path: "/company-register",
       name: "company-register",
-      component: () =>
-        import("../views/CompanyAuth/CompanyRegisterView.vue"),
+      component: () => import("../views/CompanyAuth/CompanyRegisterView.vue"),
     },
     {
       path: "/company-list",
       name: "company-list",
-      component: () =>
-        import("../views/MainPages/CompanyListView.vue"),
+      component: () => import("../views/MainPages/CompanyListView.vue"),
     },
     {
       path: "/:id/mainpage",
       name: "mainpage",
       component: () => import("../views/MainPages/UserMainPageView.vue"),
+      beforeEnter: (to, from, next) => {
+        const loggedUserId = localStorage.getItem("userId");
+
+        if (!loggedUserId) {
+          next({ name: "login" });
+        } else if (to.params.id !== loggedUserId) {
+          next({ name: "mainpage", params: { id: loggedUserId } });
+        } else {
+          next();
+        }
+      },
+    },
+    {
+      path: "/:id/vacancies",
+      name: "vacancies",
+      component: () => import("../views/JobViews/UserJobView.vue"),
       beforeEnter: (to, from, next) => {
         const loggedUserId = localStorage.getItem("userId");
 

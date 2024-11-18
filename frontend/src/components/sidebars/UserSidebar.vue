@@ -5,7 +5,7 @@
         <img
           src="@/assets/images/user.png"
           alt="foto do usuário"
-          class="size-14 rounded-full"
+          class="w-14 h-14 rounded-full"
         />
         <div class="flex flex-col">
           <h2 class="text-black text-xl font-bold capitalize">
@@ -22,18 +22,17 @@
       class="flex flex-col justify-between h-full w-full px-4 font-semibold text-zinc-200 text-lg"
     >
       <div class="flex flex-col gap-5">
-        <RouterLink to="/edit_profile" class="user_sidebar_item">
+        <button @click.prevent="abirModalUser()" class="user_sidebar_item">
           <UserCog />
           Editar Perfil
-        </RouterLink>
+        </button>
         <RouterLink to="/123" class="user_sidebar_item">
           <FileText />
           Currículo
         </RouterLink>
         <RouterLink
-          to="/user-vagas"
-          class="bg-green-600 py-2.5 px-3 w-full flex items-center gap-1.5 rounded-lg cursor-pointer
-          hover:translate-x-2 transition-all hover:bg-emerald-700 hover:font-bold shadow-lg"
+          :to="`/${userId}/vacancies`"
+          class="bg-green-600 py-2.5 px-3 w-full flex items-center gap-1.5 rounded-lg cursor-pointer hover:translate-x-2 transition-all hover:bg-emerald-700 hover:font-bold shadow-lg"
         >
           <Handshake />
           Procurar Vagas
@@ -49,23 +48,52 @@
       </div>
 
       <div class="flex gap-2">
-        <RouterLink @click="Sair()" to="/" class="sidebar_item_exit">
+        <button @click="Sair" class="sidebar_item_exit">
           <LogOut />
           Sair
-        </RouterLink>
+        </button>
         <RouterLink to="/bug_report" class="sidebar_item_exit">
           <Bug />
           Bug
         </RouterLink>
       </div>
     </section>
+
+    <ModalUser
+      :visivel="VisivelUser"
+      @close="VisivelUser = false"
+    >
+      <template #headerUser>
+        Editar o Recrutador da empresa: {{ user.name }}
+      </template>
+      <template #bodyUser>
+        <div class="flex flex-col gap-4">
+          <div class="flex flex-col gap-4">
+            <p class="text-2xl font-bold">Altere o seu nome:</p>
+            <input
+              v-model="user.name"
+              class="p-2 rounded-lg outline-none shadow-lg"
+              placeholder="Editar nome..."
+              maxlength="25"
+            />
+          </div>
+
+          <button
+            @click="saveUser"
+            type="submit"
+            class="bg-secondaryColor active:scale-75 shadow-lg self-end py-1 px-3 rounded-lg text-zinc-200 font-semibold hover:bg-darkBlue transition-all"
+          >
+            Salvar
+          </button>
+        </div>
+      </template>
+    </ModalUser>
   </aside>
 </template>
 
 <script>
 import {
   Bug,
-  ChevronLeft,
   FileText,
   Handshake,
   Info,
@@ -73,13 +101,13 @@ import {
   UserCog,
   Building2,
 } from "lucide-vue-next";
+import ModalUser from '../Modals/UserModal.vue'
 
 import axios from "axios";
 import { RouterLink } from "vue-router";
 
 export default {
   components: {
-    ChevronLeft,
     LogOut,
     UserCog,
     Bug,
@@ -87,6 +115,7 @@ export default {
     Handshake,
     Info,
     Building2,
+    ModalUser,
   },
   data() {
     return {
@@ -94,10 +123,16 @@ export default {
         name: "",
         email: "",
       },
+      VisivelUser: false,
     };
   },
   mounted() {
     this.LoggedUser();
+  },
+  computed: {
+    userId() {
+      return localStorage.getItem("userId");
+    },
   },
   methods: {
     LoggedUser() {
@@ -109,13 +144,25 @@ export default {
           this.user.email = data.email;
         })
         .catch((error) => {
-          console.log(error);
+          console.error("Erro ao buscar usuário:", error);
+        });
+    },
+    abirModalUser() {
+      this.VisivelUser = true;
+    },
+    saveUser() {
+      const testeId = this.$route.params.id;
+      axios
+        .put(`http://localhost:8001/api/users/${testeId}`, {
+          name: this.user.name,
+        })
+        .catch((error) => {
+          console.error("Erro ao atualizar usuário:", error);
         });
     },
     Sair() {
-      const userId = this.$route.params.id;
-
       localStorage.removeItem("userId");
+      this.$router.push("/");
     },
   },
 };
