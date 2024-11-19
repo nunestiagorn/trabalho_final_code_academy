@@ -3,15 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Models\Applications;
+use App\Models\Job_openings;
 use Illuminate\Http\Request;
 
 
 class ApplicationsController extends Controller
 {
     //
-    public function index(){
-        return Applications::all();
+    public function index(Request $req)
+    {
+        $applications = Applications::where('user_id', $req->user_id)->get();
+
+        $applicationsWithJobDetails = $applications->map(function($application) {
+
+            $jobOpening = Job_openings::find($application->opening_id);
+            if ($jobOpening) {
+                $application->job_name = $jobOpening->name;
+                $application->job_description = $jobOpening->description;
+            }
+            return $application;
+        });
+
+        return response()->json($applicationsWithJobDetails, 200);
     }
+
+    //^ estudar melhor o código pra refatoração
 
     public function store(Request $req){
         $application = new Applications;
