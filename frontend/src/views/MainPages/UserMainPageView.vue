@@ -10,19 +10,25 @@
         <div v-for="application in applications" :key="application.id">
           <div
             @click.prevent="abrirModalJobDetails(application)"
-            class="bg-zinc-200 capitalize py-3 px-4 text-black cursor-pointer flex flex-col gap-2 rounded-xl shadow-xl max-w-72 min-w-72 hover:scale-105 transition-all"
+            class="userCardMain relative"
           >
-            <h2 class="text-center text-2xl font-bold">{{ application.jobName }}</h2>
-            <div class="flex flex-col justify-between text-lg">
-              <h3 class="font-semibold">Empresa: {{ application.companyName }}</h3>
+            <h2 class="text-center text-[1.35rem] font-bold">
+              {{ application.jobName }}
+            </h2>
+            <div class="flex flex-col justify-between text-lg mb-5">
+              <h3 class="font-semibold">
+                Empresa: {{ application.companyName }}
+              </h3>
               <div class="text-gray-700 flex gap-2">
                 <h3>Recrutador:</h3>
                 <h3 class="underline underline-offset-2">
                   {{ application.recruiterName }}
                 </h3>
               </div>
-              <p class="mt-2 text-gray-600">{{ application.jobDescription }}</p>
             </div>
+            <div
+              class="absolute rounded-b-lg border-t-2 border-black bottom-0 left-0 w-full h-[0.85rem] bg-orange-500"
+            ></div>
           </div>
         </div>
       </div>
@@ -31,7 +37,6 @@
     <Sidebar />
   </main>
 </template>
-
 
 <script>
 import Sidebar from "@/components/sidebars/UserSidebar.vue";
@@ -50,23 +55,30 @@ export default {
   methods: {
     async getCompanyName(companyId) {
       try {
-        const { data } = await axios.get(`http://localhost:8001/api/companies/${companyId}`);
+        const { data } = await axios.get(
+          `http://localhost:8001/api/companies/${companyId}`
+        );
         return data.name;
       } catch (error) {
         console.log("Erro ao carregar o nome da empresa", error);
         return "Empresa não encontrada";
       }
     },
-    
+
     async getApplications(userId) {
       try {
-        const { data } = await axios.get(`http://localhost:8001/api/applications`, {
-          params: { user_id: userId },
-        });
+        const { data } = await axios.get(
+          `http://localhost:8001/api/applications`,
+          {
+            params: { user_id: userId },
+          }
+        );
 
         this.applications = await Promise.all(
           data.map(async (application) => {
-            const companyName = await this.getCompanyName(application.company_id);
+            const companyName = await this.getCompanyName(
+              application.company_id
+            );
 
             return {
               ...application,
@@ -76,7 +88,6 @@ export default {
             };
           })
         );
-
       } catch (error) {
         console.log("Erro ao carregar candidaturas", error);
       }
@@ -94,4 +105,3 @@ export default {
   },
 };
 </script>
-
