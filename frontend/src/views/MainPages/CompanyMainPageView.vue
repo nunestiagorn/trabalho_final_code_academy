@@ -76,11 +76,14 @@
             <span>Recrutador: {{ selectedJob.recruiter }}</span>
           </div>
           <h2 class="-mb-3 ml-2 mt-4">Detalhes da vaga:</h2>
-          <p
+          <input
+            type="text"
+            v-model="selectedJob.description"
+            placeholder="Descrição da vaga..."
+            maxlength="300"
+            minlength="20"
             class="overflow-y-auto overflow-x-hidden max-h-48 w-full bg-gray-300 text-gray-700 text-lg shadow-[inset_0_0_10px_1px_rgba(0,0,0,0.75)] rounded-lg p-4 break-words"
-          >
-            {{ selectedJob.description }}
-          </p>
+          />
         </div>
       </template>
 
@@ -176,6 +179,28 @@ export default {
         .catch((error) => {
           console.error("Erro ao excluir a vaga:", error);
           alert("Ocorreu um erro ao excluir a vaga.");
+        });
+    },
+    editarVaga() {
+      axios
+        .put(`http://localhost:8001/api/job_openings/${this.selectedJob.id}`, {
+          description: this.selectedJob.description,
+        })
+        .then((response) => {
+
+          const updatedJob = this.jobs.find(
+            (job) => job.id === this.selectedJob.id
+          );
+          if (updatedJob) {
+            updatedJob.description = this.selectedJob.description;
+          }
+
+          this.closeModal();
+          alert("Vaga atualizada com sucesso!");
+        })
+        .catch((error) => {
+          console.error("Erro ao atualizar vaga:", error);
+          alert("Ocorreu um erro ao atualizar a vaga.");
         });
     },
   },

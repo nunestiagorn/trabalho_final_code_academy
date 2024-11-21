@@ -96,7 +96,7 @@
           </div>
 
           <button
-            @click="saveRecruiter"
+            @click="editRecruiter"
             type="submit"
             class="bg-secondaryColor active:scale-75 shadow-lg self-end py-1 px-3 rounded-lg text-zinc-200 font-semibold hover:bg-darkBlue transition-all"
           >
@@ -261,7 +261,7 @@ export default {
         recruiter_name: this.company.recruiter_name,
       };
     },
-    saveRecruiter() {
+    editRecruiter() {
       if (!this.company.recruiter_name.trim()) {
         alert("Erro: O nome do recrutador não pode estar vazio.");
         return;
