@@ -281,6 +281,26 @@ export default {
         });
     },
     saveCompany() {
+      if (!this.company.name.trim()) {
+        alert("Erro: O nome da empresa não pode estar vazio.");
+        return;
+      }
+
+      if (this.company.name.length < 6) {
+        alert("Erro: O nome da empresa deve ter pelo menos 6 caracteres.");
+        return;
+      }
+
+      if (!this.company.description.trim()) {
+        alert("Erro: A descrição da empresa não pode estar vazia.");
+        return;
+      }
+
+      if (this.company.description.length < 20) {
+        alert("Erro: A descrição da empresa deve ter pelo menos 20 caracteres.");
+        return;
+      }
+
       axios
         .put(`http://localhost:8001/api/companies/${this.company.id}`, {
           name: this.company.name,
