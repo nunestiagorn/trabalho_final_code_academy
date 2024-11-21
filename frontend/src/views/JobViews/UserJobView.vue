@@ -35,7 +35,11 @@
             <p
               class="p-4 bg-neutral-300 text-sm font-medium italic rounded-lg shadow-lg"
             >
-              {{ job.description }}
+              {{
+                job.description.length > 30
+                  ? job.description.slice(0, 30) + "..."
+                  : job.description
+              }}
             </p>
           </div>
         </div>

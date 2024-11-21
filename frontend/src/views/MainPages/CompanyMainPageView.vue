@@ -76,13 +76,13 @@
             <span>Recrutador: {{ selectedJob.recruiter }}</span>
           </div>
           <h2 class="-mb-3 ml-2 mt-4">Detalhes da vaga:</h2>
-          <input
+          <textarea
             type="text"
             v-model="selectedJob.description"
             placeholder="Descrição da vaga..."
-            maxlength="300"
+            maxlength="500"
             minlength="20"
-            class="overflow-y-auto overflow-x-hidden max-h-48 w-full bg-gray-300 text-gray-700 text-lg shadow-[inset_0_0_10px_1px_rgba(0,0,0,0.75)] rounded-lg p-4 break-words"
+            class="overflow-y-auto resize-none textoDescricao min-h-40 w-full bg-gray-300 text-gray-700 text-lg shadow-[inset_0_0_10px_1px_rgba(0,0,0,0.75)] rounded-lg p-4 break-words"
           />
         </div>
       </template>
