@@ -262,6 +262,16 @@ export default {
       };
     },
     saveRecruiter() {
+      if (!this.company.recruiter_name.trim()) {
+        alert("Erro: O nome do recrutador não pode estar vazio.");
+        return;
+      }
+
+      if (this.company.recruiter_name.length < 3) {
+        alert("Erro: O nome do recrutador deve ter pelo menos 3 caracteres.");
+        return;
+      }
+
       axios
         .put(`http://localhost:8001/api/companies/${this.company.id}`, {
           recruiter_name: this.company.recruiter_name,

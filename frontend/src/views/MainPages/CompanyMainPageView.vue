@@ -145,6 +145,8 @@ export default {
             return {
               ...job,
               companyName: companyJobData.data.name,
+              companyCNPJ: companyJobData.data.cnpj,
+              recruiter: companyJobData.data.recruiter_name,
             };
           })
         );
@@ -160,6 +162,21 @@ export default {
     },
     closeModal() {
       this.VisivelJobDetail = false;
+    },
+    excluirVaga() {
+      axios
+        .delete(`http://localhost:8001/api/job_openings/${this.selectedJob.id}`)
+        .then((response) => {
+          this.jobs = this.jobs.filter((job) => job.id !== this.selectedJob.id);
+
+          this.closeModal();
+
+          alert("Vaga excluída com sucesso!");
+        })
+        .catch((error) => {
+          console.error("Erro ao excluir a vaga:", error);
+          alert("Ocorreu um erro ao excluir a vaga.");
+        });
     },
   },
   mounted() {
