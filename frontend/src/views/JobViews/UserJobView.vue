@@ -20,7 +20,7 @@
         <div v-for="job in jobs" :key="job.id">
           <div
             @click.prevent="abrirModalJobDetails(job)"
-            class="bg-zinc-200 capitalize py-3 px-4 text-black cursor-pointer flex flex-col gap-2 rounded-xl shadow-xl max-w-72 min-w-72 hover:scale-105 transition-all"
+            class="bg-zinc-200 capitalize py-3 px-4 text-black cursor-pointer flex flex-col justify-between h-full gap-2 rounded-xl shadow-xl max-w-72 min-w-72 hover:scale-105 transition-all"
           >
             <h2 class="text-center text-2xl font-bold">{{ job.name }}</h2>
             <div class="flex flex-col justify-between text-lg">
