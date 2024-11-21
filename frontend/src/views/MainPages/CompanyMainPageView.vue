@@ -23,7 +23,15 @@
               </div>
             </div>
 
-            <h2 class="text-gray-800 font-medium">{{ job.description }}</h2>
+            <h2
+              class="text-gray-800 font-medium text-md p-2 bg-zinc-300 rounded-lg shadow-inner"
+            >
+              {{
+                job.description.length > 20
+                  ? job.description.slice(0, 20) + "..."
+                  : job.description
+              }}
+            </h2>
 
             <div class="flex justify-between">
               <button
@@ -33,6 +41,7 @@
               </button>
 
               <button
+                @click="abrirModalJobDetails(job)"
                 class="bg-primaryColor text-zinc-200 px-4 font-medium rounded-lg hover:bg-secondaryColor transition-all"
               >
                 Exibir Detalhes
@@ -42,11 +51,68 @@
         </div>
       </section>
     </section>
+
+    <ModalJobDetail
+      :visivel="VisivelJobDetail"
+      @close="VisivelJobDetail = false"
+    >
+      <template #headerJobDetail>
+        <div class="flex gap-2">
+          <p>Detalhes da Vaga de:</p>
+          <p class="underline underline-offset-4 capitalize">
+            {{ selectedJob?.name }}
+          </p>
+        </div>
+      </template>
+      <template #bodyJobDetail>
+        <div v-if="selectedJob" class="flex flex-col gap-4">
+          <div class="flex flex-col gap-2 text-[1.35rem]">
+            <div class="flex justify-between">
+              <span>Empresa: {{ selectedJob.companyName }}</span>
+              <span class="text-gray-800 text-lg"
+                >CNPJ: {{ selectedJob.companyCNPJ }}</span
+              >
+            </div>
+            <span>Recrutador: {{ selectedJob.recruiter }}</span>
+          </div>
+          <h2 class="-mb-3 ml-2 mt-4">Detalhes da vaga:</h2>
+          <p
+            class="overflow-y-auto overflow-x-hidden max-h-48 w-full bg-gray-300 text-gray-700 text-lg shadow-[inset_0_0_10px_1px_rgba(0,0,0,0.75)] rounded-lg p-4 break-words"
+          >
+            {{ selectedJob.description }}
+          </p>
+        </div>
+      </template>
+
+      <template #buttonsJobDetail>
+        <button
+          type="submit"
+          @click.prevent="excluirVaga"
+          class="bg-red-600 active:scale-75 shadow-lg py-1 px-3 text-lg rounded-lg text-zinc-200 font-semibold hover:bg-red-800 transition-all"
+        >
+          Excluir Vaga
+        </button>
+        <button
+          type="submit"
+          @click.prevent="editarVaga"
+          class="bg-orange-600 active:scale-75 shadow-lg py-1 px-3 text-lg rounded-lg text-zinc-200 font-semibold hover:bg-orange-800 transition-all"
+        >
+          Editar Vaga
+        </button>
+        <button
+          @click.prevent="closeModal"
+          class="bg-primaryColor p-1.5 px-2.5 rounded-lg shadow-lg text-lg text-zinc-200 font-semibold hover:bg-darkBlue transition-all"
+        >
+          Fechar
+        </button>
+      </template>
+    </ModalJobDetail>
   </main>
 </template>
 
 <script>
 import Sidebar from "@/components/sidebars/CompanySidebar.vue";
+import ModalJobDetail from "@/components/Modals/JobDetailsModal.vue";
 import axios from "axios";
 import { FileUser } from "lucide-vue-next";
 import { useRoute } from "vue-router";
@@ -55,10 +121,13 @@ export default {
   components: {
     Sidebar,
     FileUser,
+    ModalJobDetail,
   },
   data() {
     return {
       jobs: [],
+      VisivelJobDetail: false,
+      selectedJob: null,
     };
   },
   methods: {
@@ -84,6 +153,13 @@ export default {
       } catch (error) {
         console.error("Erro ao buscar as vagas ou o nome das empresas:", error);
       }
+    },
+    abrirModalJobDetails(job) {
+      this.selectedJob = job;
+      this.VisivelJobDetail = true;
+    },
+    closeModal() {
+      this.VisivelJobDetail = false;
     },
   },
   mounted() {

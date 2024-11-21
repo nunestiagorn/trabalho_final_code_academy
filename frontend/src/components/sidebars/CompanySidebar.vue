@@ -90,6 +90,7 @@
               v-model="company.recruiter_name"
               class="p-2 rounded-lg outline-none shadow-lg"
               placeholder="Editar Recrutador..."
+              minlength="3"
               maxlength="25"
             />
           </div>
