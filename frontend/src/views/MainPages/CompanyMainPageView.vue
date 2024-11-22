@@ -35,7 +35,7 @@
 
             <div class="flex justify-between">
               <button
-                @click="abrirModalCandidate"
+                @click="abrirModalCandidate(job)"
                 class="bg-primaryColor self-start text-zinc-200 p-1.5 font-medium rounded-lg hover:bg-secondaryColor transition-all"
               >
                 <FileUser />
@@ -120,7 +120,20 @@
         <p>Candidatos da Vaga</p>
       </template>
       <template #bodyCandidate>
-        teste
+        <div v-if="candidates.length > 0" class="flex flex-col gap-4">
+          <h3 class="text-lg font-bold">Candidatos:</h3>
+          <div
+            v-for="candidate in candidates"
+            :key="candidate.id"
+            class="flex justify-between items-center p-2 border-b"
+          >
+            <span class="font-semibold">{{ candidate.userName }}</span>
+            <span>{{ candidate.userEmail }}</span>
+          </div>
+        </div>
+        <div v-else>
+          <p>Nenhum candidato encontrado para essa vaga.</p>
+        </div>
       </template>
     </ModalCandidate>
   </main>
@@ -144,6 +157,7 @@ export default {
   data() {
     return {
       jobs: [],
+      candidates: [],
       VisivelCandidate: false,
       VisivelJobDetail: false,
       selectedJob: null,
@@ -175,6 +189,39 @@ export default {
         console.error("Erro ao buscar as vagas ou o nome das empresas:", error);
       }
     },
+    async getCandidates() {
+      try {
+        const { data } = await axios.get(
+          `http://localhost:8001/api/applications`,
+          {
+            params: { opening_id: this.selectedJob.id },
+          }
+        );
+        console.log(data);
+
+        if (Array.isArray(data)) {
+          const candidates = await Promise.all(
+            data.map(async (application) => {
+              const userData = await axios.get(
+                `http://localhost:8001/api/users/${application.user_id}`
+              );
+              return {
+                ...application,
+                userName: userData.data.name,
+                userEmail: userData.data.email,
+              };
+            })
+          );
+          this.candidates = candidates;
+        } else {
+          console.error("Formato de dados inválido:", data);
+          this.candidates = [];
+        }
+      } catch (error) {
+        console.error("Erro ao buscar os candidatos:", error);
+      }
+    },
+
     abrirModalJobDetails(job) {
       this.selectedJob = job;
       this.VisivelJobDetail = true;
@@ -182,9 +229,16 @@ export default {
     closeModal() {
       this.VisivelJobDetail = false;
     },
-    abrirModalCandidate(){
-      this.VisivelCandidate = true;
+    abrirModalCandidate(job) {
+      this.selectedJob = job;
+      if (this.selectedJob && this.selectedJob.id) {
+        this.getCandidates();
+        this.VisivelCandidate = true;
+      } else {
+        console.error("Nenhuma vaga selecionada.");
+      }
     },
+
     excluirVaga() {
       axios
         .delete(`http://localhost:8001/api/job_openings/${this.selectedJob.id}`)
@@ -222,15 +276,9 @@ export default {
         });
     },
   },
-  mounted() {
+  created() {
     const route = useRoute();
-    const id = route.params.id;
-
-    if (id) {
-      this.getJobs(id);
-    } else {
-      console.error("ID da empresa não encontrado na URL.");
-    }
+    this.getJobs(route.params.id);
   },
 };
 </script>
