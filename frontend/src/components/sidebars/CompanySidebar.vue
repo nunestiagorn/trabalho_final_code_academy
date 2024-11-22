@@ -1,5 +1,5 @@
 <template>
-  <aside class="bg-neutral-200 flex flex-col w-3/12 items-center gap-3 p-3">
+  <aside class="bg-neutral-200 flex flex-col w-3/12 items-center gap-3 p-2">
     <div class="flex flex-col pt-4">
       <div class="flex flex-col gap-3 items-center">
         <h3 class="text-zinc-600 text-md -mt-1">CNPJ: {{ company.cnpj }}</h3>
@@ -11,7 +11,7 @@
         <div
           class="-mt-1.5 flex flex-col text-black capitalize items-center gap-1"
         >
-          <h2 class="font-bold text-xl underline underline-offset-4">
+          <h2 class="font-bold text-xl underline underline-offset-4 text-center">
             {{ company.name }}
           </h2>
 
@@ -90,12 +90,13 @@
               v-model="company.recruiter_name"
               class="p-2 rounded-lg outline-none shadow-lg"
               placeholder="Editar Recrutador..."
+              minlength="3"
               maxlength="25"
             />
           </div>
 
           <button
-            @click="saveRecruiter"
+            @click="editRecruiter"
             type="submit"
             class="bg-secondaryColor active:scale-75 shadow-lg self-end py-1 px-3 rounded-lg text-zinc-200 font-semibold hover:bg-darkBlue transition-all"
           >
@@ -150,9 +151,9 @@
               maxlength="35"
             />
             <p class="text-2xl font-bold">Insira a descrição da vaga:</p>
-            <input
+            <textarea
               v-model="job.description"
-              class="p-2 rounded-lg outline-none shadow-lg"
+              class="p-2 rounded-lg outline-none shadow-lg min-h-40 resize-none"
               placeholder="Descrição da vaga..."
               maxlength="300"
             />
@@ -260,7 +261,17 @@ export default {
         recruiter_name: this.company.recruiter_name,
       };
     },
-    saveRecruiter() {
+    editRecruiter() {
+      if (!this.company.recruiter_name.trim()) {
+        alert("Erro: O nome do recrutador não pode estar vazio.");
+        return;
+      }
+
+      if (this.company.recruiter_name.length < 3) {
+        alert("Erro: O nome do recrutador deve ter pelo menos 3 caracteres.");
+        return;
+      }
+
       axios
         .put(`http://localhost:8001/api/companies/${this.company.id}`, {
           recruiter_name: this.company.recruiter_name,
@@ -270,6 +281,26 @@ export default {
         });
     },
     saveCompany() {
+      if (!this.company.name.trim()) {
+        alert("Erro: O nome da empresa não pode estar vazio.");
+        return;
+      }
+
+      if (this.company.name.length < 6) {
+        alert("Erro: O nome da empresa deve ter pelo menos 6 caracteres.");
+        return;
+      }
+
+      if (!this.company.description.trim()) {
+        alert("Erro: A descrição da empresa não pode estar vazia.");
+        return;
+      }
+
+      if (this.company.description.length < 20) {
+        alert("Erro: A descrição da empresa deve ter pelo menos 20 caracteres.");
+        return;
+      }
+
       axios
         .put(`http://localhost:8001/api/companies/${this.company.id}`, {
           name: this.company.name,

@@ -12,10 +12,10 @@ class ApplicationsController extends Controller
     //
     public function index(Request $req)
     {
-        $applications = Applications::where('user_id', $req->user_id)->get();
+
+        $applications = Applications::where('opening_id', $req->opening_id)->get();
 
         $applicationsWithJobDetails = $applications->map(function($application) {
-
             $jobOpening = Job_openings::find($application->opening_id);
             if ($jobOpening) {
                 $application->job_name = $jobOpening->name;
@@ -26,6 +26,7 @@ class ApplicationsController extends Controller
 
         return response()->json($applicationsWithJobDetails, 200);
     }
+
 
     //^ estudar melhor o código pra refatoração
 
