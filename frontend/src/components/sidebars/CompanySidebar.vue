@@ -1,5 +1,5 @@
 <template>
-  <aside class="bg-neutral-200 flex flex-col w-3/12 items-center gap-3 p-3">
+  <aside class="bg-neutral-200 flex flex-col w-3/12 items-center gap-3 p-2">
     <div class="flex flex-col pt-4">
       <div class="flex flex-col gap-3 items-center">
         <h3 class="text-zinc-600 text-md -mt-1">CNPJ: {{ company.cnpj }}</h3>
@@ -11,7 +11,7 @@
         <div
           class="-mt-1.5 flex flex-col text-black capitalize items-center gap-1"
         >
-          <h2 class="font-bold text-xl underline underline-offset-4">
+          <h2 class="font-bold text-xl underline underline-offset-4 text-center">
             {{ company.name }}
           </h2>
 
@@ -151,9 +151,9 @@
               maxlength="35"
             />
             <p class="text-2xl font-bold">Insira a descrição da vaga:</p>
-            <input
+            <textarea
               v-model="job.description"
-              class="p-2 rounded-lg outline-none shadow-lg"
+              class="p-2 rounded-lg outline-none shadow-lg min-h-40 resize-none"
               placeholder="Descrição da vaga..."
               maxlength="300"
             />

@@ -35,6 +35,7 @@
 
             <div class="flex justify-between">
               <button
+                @click="abrirModalCandidate"
                 class="bg-primaryColor self-start text-zinc-200 p-1.5 font-medium rounded-lg hover:bg-secondaryColor transition-all"
               >
                 <FileUser />
@@ -110,12 +111,25 @@
         </button>
       </template>
     </ModalJobDetail>
+
+    <ModalCandidate
+      :visivel="VisivelCandidate"
+      @close="VisivelCandidate = false"
+    >
+      <template #headerCandidate>
+        <p>Candidatos da Vaga</p>
+      </template>
+      <template #bodyCandidate>
+        teste
+      </template>
+    </ModalCandidate>
   </main>
 </template>
 
 <script>
 import Sidebar from "@/components/sidebars/CompanySidebar.vue";
 import ModalJobDetail from "@/components/Modals/JobDetailsModal.vue";
+import ModalCandidate from "@/components/Modals/CandidateModal.vue";
 import axios from "axios";
 import { FileUser } from "lucide-vue-next";
 import { useRoute } from "vue-router";
@@ -125,10 +139,12 @@ export default {
     Sidebar,
     FileUser,
     ModalJobDetail,
+    ModalCandidate,
   },
   data() {
     return {
       jobs: [],
+      VisivelCandidate: false,
       VisivelJobDetail: false,
       selectedJob: null,
     };
@@ -166,6 +182,9 @@ export default {
     closeModal() {
       this.VisivelJobDetail = false;
     },
+    abrirModalCandidate(){
+      this.VisivelCandidate = true;
+    },
     excluirVaga() {
       axios
         .delete(`http://localhost:8001/api/job_openings/${this.selectedJob.id}`)
@@ -187,7 +206,6 @@ export default {
           description: this.selectedJob.description,
         })
         .then((response) => {
-
           const updatedJob = this.jobs.find(
             (job) => job.id === this.selectedJob.id
           );
