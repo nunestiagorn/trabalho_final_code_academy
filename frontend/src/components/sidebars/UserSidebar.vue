@@ -22,7 +22,7 @@
       class="flex flex-col justify-between h-full w-full px-4 font-semibold text-zinc-200 text-lg"
     >
       <div class="flex flex-col gap-5">
-        <button @click.prevent="abirModalUser()" class="user_sidebar_item">
+        <button @click.prevent="abrirModal()" class="user_sidebar_item">
           <UserCog />
           Editar Perfil
         </button>
@@ -147,7 +147,7 @@ export default {
           console.error("Erro ao buscar usuário:", error);
         });
     },
-    abirModalUser() {
+    abrirModal() {
       this.VisivelUser = true;
     },
     saveUser() {

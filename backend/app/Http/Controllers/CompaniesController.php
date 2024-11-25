@@ -22,10 +22,10 @@ class CompaniesController extends Controller
             'name' => 'required|string|max:255',
             'cnpj' => 'required|string|max:20|unique:companies',
             'description' => 'required|string|max:500',
-            //'password' => 'required|string|min:8|confirmed',
+            'password' => 'required|string|min:6',
         ]);
 
-        // Retorna erro caso a validação falhe
+       
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
@@ -114,7 +114,7 @@ class CompaniesController extends Controller
         $company = Companies::find($req->id);
 
         if (!$company) {
-            return response()->json(['message' => 'Compania não encontrado'], 404);
+            return response()->json(['message' => 'Compania não encontrada'], 404);
         }
 
         $company->delete();
