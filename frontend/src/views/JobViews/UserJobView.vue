@@ -74,7 +74,7 @@
 
           <h2 class="-mb-3 ml-2 mt-4">Detalhes da vaga:</h2>
           <p
-          class="overflow-y-auto text-justify resize-none textoDescricao min-h-40 w-full bg-gray-300 text-gray-700 text-lg shadow-[inset_0_0_10px_1px_rgba(0,0,0,0.75)] rounded-lg p-4 break-words"
+            class="overflow-y-auto text-justify resize-none textoDescricao min-h-40 w-full bg-gray-300 text-gray-700 text-lg shadow-[inset_0_0_10px_1px_rgba(0,0,0,0.75)] rounded-lg p-4 break-words"
           >
             {{ selectedJob.description }}
           </p>
@@ -105,6 +105,32 @@ import ModalJobDetail from "@/components/Modals/JobDetailsModal.vue";
 import Sidebar from "@/components/sidebars/UserSidebar.vue";
 import axios from "axios";
 import { ArrowLeft } from "lucide-vue-next";
+import "vue3-toastify/dist/index.css";
+import { toast } from "vue3-toastify";
+
+const candidatarVaga = () => {
+  toast("Candidatado!", {
+    type: "success",
+    autoClose: 2500,
+    multiple: false,
+    position: "top-center",
+    toastStyle: {
+      fontSize: "22px",
+    },
+  });
+};
+
+const erroCandidatarVaga = () => {
+  toast("Erro ao se Candidatar :(", {
+    type: "error",
+    autoClose: 2500,
+    multiple: false,
+    position: "top-center",
+    toastStyle: {
+      fontSize: "22px",
+    },
+  });
+};
 
 export default {
   components: {
@@ -160,17 +186,22 @@ export default {
         const userId = this.$route.params.id;
         const job = this.selectedJob;
 
-        axios.post(`http://localhost:8001/api/applications/`, {
-          user_id: userId,
-          opening_id: job.id,
-          company_id: job.company_id,
-          recruiter_name: job.recruiter,
-        });
-
-        alert("Candidatura enviada com sucesso!");
+        axios
+          .post(`http://localhost:8001/api/applications/`, {
+            user_id: userId,
+            opening_id: job.id,
+            company_id: job.company_id,
+            recruiter_name: job.recruiter,
+          })
+          .then(() => {
+            candidatarVaga();
+          })
+          .catch((error) => {
+            console.log(error);
+            erroCandidatarVaga();
+          });
       } catch (error) {
         console.log(error);
-        alert("Erro na candidatura");
       }
     },
   },
