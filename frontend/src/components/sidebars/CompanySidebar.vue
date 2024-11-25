@@ -11,7 +11,9 @@
         <div
           class="-mt-1.5 flex flex-col text-black capitalize items-center gap-1"
         >
-          <h2 class="font-bold text-xl underline underline-offset-4 text-center">
+          <h2
+            class="font-bold text-xl underline underline-offset-4 text-center"
+          >
             {{ company.name }}
           </h2>
 
@@ -181,11 +183,38 @@ import {
   Info,
   MonitorCog,
 } from "lucide-vue-next";
+
 import axios from "axios";
 import { RouterLink } from "vue-router";
 import ModalRecruiter from "@/components/Modals/RecruiterModal.vue";
 import ModalCompany from "@/components/Modals/CompanyModal.vue";
 import ModalJob from "@/components/Modals/JobModal.vue";
+import "vue3-toastify/dist/index.css";
+import { toast } from "vue3-toastify";
+
+const vagaPublicada = () => {
+  toast("Vaga Publicada!", {
+    type: "success",
+    autoClose: 2500,
+    multiple: false,
+    position: "top-center",
+    toastStyle: {
+      fontSize: "22px",
+    },
+  });
+};
+
+const erroVagaPublicada = () => {
+  toast("Erro ao Publicar :(", {
+    type: "error",
+    autoClose: 2500,
+    multiple: false,
+    position: "top-center",
+    toastStyle: {
+      fontSize: "22px",
+    },
+  });
+};
 
 export default {
   components: {
@@ -297,7 +326,9 @@ export default {
       }
 
       if (this.company.description.length < 20) {
-        alert("Erro: A descrição da empresa deve ter pelo menos 20 caracteres.");
+        alert(
+          "Erro: A descrição da empresa deve ter pelo menos 20 caracteres."
+        );
         return;
       }
 
@@ -318,8 +349,12 @@ export default {
           company_id: this.company.id,
           recruiter_name: this.company.recruiter_name,
         })
+        .then(() => {
+          vagaPublicada();
+        })
         .catch((error) => {
           console.error("Erro ao criar vaga:", error);
+          erroVagaPublicada();
         });
     },
   },

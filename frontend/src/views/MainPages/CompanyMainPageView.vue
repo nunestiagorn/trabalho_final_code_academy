@@ -83,7 +83,7 @@
             placeholder="Descrição da vaga..."
             maxlength="500"
             minlength="20"
-            class="overflow-y-auto resize-none textoDescricao min-h-40 w-full bg-gray-300 text-gray-700 text-lg shadow-[inset_0_0_10px_1px_rgba(0,0,0,0.75)] rounded-lg p-4 break-words"
+            class="overflow-y-auto resize-none text-justify textoDescricao min-h-40 w-full bg-gray-300 text-gray-700 text-lg shadow-[inset_0_0_10px_1px_rgba(0,0,0,0.75)] rounded-lg p-4 break-words"
           />
         </div>
       </template>
@@ -120,15 +120,30 @@
         <p>Candidatos da Vaga</p>
       </template>
       <template #bodyCandidate>
-        <div v-if="candidates.length > 0" class="flex flex-col gap-4">
+        <div
+          v-if="candidates.length > 0"
+          class="flex flex-col gap-4 max-h-72 overflow-y-scroll"
+        >
           <h3 class="text-lg font-bold">Candidatos:</h3>
           <div
             v-for="candidate in candidates"
             :key="candidate.id"
             class="flex justify-between items-center p-2 border-b"
           >
-            <span class="font-semibold">{{ candidate.userName }}</span>
-            <span>{{ candidate.userEmail }}</span>
+            <div class="flex gap-2 items-center">
+              <span class="font-semibold">| {{ candidate.userName }}</span>
+              <p class="text-gray-600 text-sm">{{ candidate.userEmail }}</p>
+            </div>
+
+            <div class="flex flex-col">
+              <h2>Status: {{ statusVaga }}</h2>
+              <select v-model="statusVaga">
+                <option disabled value="">Status</option>
+                <option>Em Análise</option>
+                <option>Aprovado</option>
+                <option>Reprovado</option>
+              </select>
+            </div>
           </div>
         </div>
         <div v-else>
