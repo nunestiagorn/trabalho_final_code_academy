@@ -36,8 +36,8 @@
               class="p-4 bg-neutral-300 text-sm font-medium italic rounded-lg shadow-lg"
             >
               {{
-                job.description.length > 30
-                  ? job.description.slice(0, 30) + "..."
+                job.description.length > 20
+                  ? job.description.slice(0, 20) + "..."
                   : job.description
               }}
             </p>
@@ -74,7 +74,7 @@
 
           <h2 class="-mb-3 ml-2 mt-4">Detalhes da vaga:</h2>
           <p
-            class="overflow-y-scroll bg-gray-300 text-gray-700 text-lg shadow-[inset_0_0_10px_1px_rgba(0,0,0,0.75)] rounded-lg p-4"
+          class="overflow-y-auto text-justify resize-none textoDescricao min-h-40 w-full bg-gray-300 text-gray-700 text-lg shadow-[inset_0_0_10px_1px_rgba(0,0,0,0.75)] rounded-lg p-4 break-words"
           >
             {{ selectedJob.description }}
           </p>

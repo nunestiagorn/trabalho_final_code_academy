@@ -83,7 +83,7 @@
             placeholder="Descrição da vaga..."
             maxlength="500"
             minlength="20"
-            class="overflow-y-auto resize-none textoDescricao min-h-40 w-full bg-gray-300 text-gray-700 text-lg shadow-[inset_0_0_10px_1px_rgba(0,0,0,0.75)] rounded-lg p-4 break-words"
+            class="overflow-y-auto resize-none text-justify textoDescricao min-h-40 w-full bg-gray-300 text-gray-700 text-lg shadow-[inset_0_0_10px_1px_rgba(0,0,0,0.75)] rounded-lg p-4 break-words"
           />
         </div>
       </template>
