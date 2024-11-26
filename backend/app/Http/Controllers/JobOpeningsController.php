@@ -19,6 +19,7 @@ class JobOpeningsController extends Controller
         $validator = Validator::make($req->all(), [
             'name' => 'required|string|max:50',
             'description' => 'required|string|max:300',
+            'salary' => 'required|integer',
 
         ]);
 
@@ -29,6 +30,7 @@ class JobOpeningsController extends Controller
         $opening = Job_openings::create([
             'name' => $req->name,
             'description' => $req->description,
+            'salary' => $req->salary,
             'company_id' => $req->company_id,
             'recruiter_name' => $req->recruiter_name,
         ]);
@@ -44,8 +46,8 @@ class JobOpeningsController extends Controller
 
         $opening->name = $req->name ?? $opening->name;
         $opening->description = $req->description ?? $opening->description;
-
-
+        $opening->salary = $req->salary ?? $opening->salary;
+        
         $opening->save();
 
         return response("Success", 200);
@@ -65,17 +67,6 @@ class JobOpeningsController extends Controller
 
         return response()->json($jobs, 200);
     }
-
-
-    // public function show($id){
-    //     $user = Job_openings::find($id);
-
-    //     if (!$user) {
-    //         return response()->json(['message' => 'Usuário não encontrado'], 404);
-    //     }
-
-    //     return response()->json($user, 200);
-    // }
 
     public function delete(Request $req){
         $opening = Job_openings::find($req->id);

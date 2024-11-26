@@ -12,6 +12,7 @@ class Job_openings extends Model
     protected $fillable = [
         'name',
         'description',
+        'salary',
         'company_id',
         'recruiter_name',
     ];
