@@ -76,7 +76,23 @@
             </div>
             <span>Recrutador: {{ selectedJob.recruiter }}</span>
           </div>
-          <h2 class="-mb-3 ml-2 mt-4">Detalhes da vaga:</h2>
+
+          <hr class="w-full border-b-2 border-gray-800 rounded-full" />
+
+          <div class="flex gap-2 items-center text-xl -mb-3 ml-2">
+            <h2 class="">Salário:</h2>
+            <input
+              type="text"
+              @input="formatSalary"
+              v-model="selectedJob.salary"
+              placeholder="Salário da vaga..."
+              maxlength="10"
+              minlength="4"
+              class="p-2 w-5/12 bg-gray-300 text-gray-900 text-lg shadow-[inset_0_0_12px_-2px_rgba(0,0,0,0.75)] rounded-lg"
+            />
+          </div>
+
+          <h2 class="ml-2">Detalhes da vaga:</h2>
           <textarea
             type="text"
             v-model="selectedJob.description"
@@ -289,6 +305,14 @@ export default {
           console.error("Erro ao atualizar vaga:", error);
           alert("Ocorreu um erro ao atualizar a vaga.");
         });
+    },
+    formatSalary(event) {
+      const value = event.target.value.replace(/\D/g, "");
+      const formatted = (Number(value) / 100).toLocaleString("pt-BR", {
+        maximumFractionDigits: 2,
+      });
+
+      this.selectedJob.salary = formatted;
     },
   },
   created() {

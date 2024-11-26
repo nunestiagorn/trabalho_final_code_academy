@@ -19,7 +19,7 @@ class JobOpeningsController extends Controller
         $validator = Validator::make($req->all(), [
             'name' => 'required|string|max:50',
             'description' => 'required|string|max:300',
-            'salary' => 'required|integer',
+            'salary' => 'required|string',
 
         ]);
 
@@ -47,7 +47,7 @@ class JobOpeningsController extends Controller
         $opening->name = $req->name ?? $opening->name;
         $opening->description = $req->description ?? $opening->description;
         $opening->salary = $req->salary ?? $opening->salary;
-        
+
         $opening->save();
 
         return response("Success", 200);
