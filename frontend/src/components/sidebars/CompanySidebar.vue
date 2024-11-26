@@ -111,8 +111,8 @@
     <ModalCompany :visivel="VisivelCompany" @close="VisivelCompany = false">
       <template #headerCompany> Editar a empresa: {{ company.name }} </template>
       <template #bodyCompany>
-        <div class="flex flex-col gap-4">
-          <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-3">
+          <div class="flex flex-col gap-3">
             <p class="text-2xl font-bold">Altere o nome da Empresa:</p>
             <input
               v-model="company.name"
@@ -126,6 +126,10 @@
               class="p-2 rounded-lg outline-none shadow-lg"
               placeholder="Editar a descrição da Empresa..."
               maxlength="100"
+            />
+            <p class="text-2xl font-bold">Altere a foto de perfil da Empresa:</p>
+            <input
+
             />
           </div>
 

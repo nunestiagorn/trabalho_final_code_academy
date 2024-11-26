@@ -79,7 +79,7 @@ class UsersController extends Controller
             'name' => 'sometimes|required|string|max:50',
             'email' => 'sometimes|required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:6|confirmed',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -95,6 +95,7 @@ class UsersController extends Controller
 
         $user->name = $req->name ?? $user->name;
         $user->email = $req->email ?? $user->email;
+        $user->image = $req->image ?? $user->image;
         if ($req->filled('password')) {
             $user->password = Hash::make($req->password);
         }
