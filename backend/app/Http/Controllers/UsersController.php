@@ -25,16 +25,16 @@ class UsersController extends Controller
             'password' => 'required|string|min:6',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
-    
+
         $imagePath = null;
         if ($req->hasFile('image')) {
             $imagePath = $req->file('image')->store('users', 'public');
         }
-    
+
         $user = Users::create([
             'name' => $req->name,
             'email' => $req->email,
@@ -42,54 +42,74 @@ class UsersController extends Controller
             'password' => Hash::make($req->password),
             'image' => $imagePath,
         ]);
-    
+
         return response()->json([
             'status' => true,
             'message' => "Registration Success",
             'user' => $user,
         ]);
     }
-    
+
+    public function check(Request $req)
+    {
+        $credentials = $req->only('email', 'password');
+
+        if (!Auth::attempt($credentials)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Credenciais inválidas'
+            ], 401);
+        }
+
+        $user = Auth::user();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Login realizado com sucesso',
+            'user' => $user,
+        ]);
+    }
+
     public function update(Request $req)
     {
         $user = Users::find($req->id);
-    
+
         if (!$user) {
             return response()->json(['message' => 'Usuário não encontrado'], 404);
         }
-    
+
         $validator = Validator::make($req->all(), [
             'name' => 'sometimes|required|string|max:50',
             'email' => 'sometimes|required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:6|confirmed',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
-    
+
         if ($req->hasFile('image')) {
             if ($user->image) {
                 Storage::disk('public')->delete($user->image);
             }
             $user->image = $req->file('image')->store('users', 'public');
         }
-    
+
         $user->name = $req->name ?? $user->name;
         $user->email = $req->email ?? $user->email;
         if ($req->filled('password')) {
             $user->password = Hash::make($req->password);
         }
-    
+
         $user->save();
-    
+
         return response()->json([
             'message' => 'Usuário atualizado com sucesso!',
             'user' => $user,
         ], 200);
     }
-        
+
 
     public function show($id)
     {
@@ -118,19 +138,17 @@ class UsersController extends Controller
     public function showImage($id)
     {
         $user = Users::find($id);
-    
+
         if (!$user || !$user->image) {
             return response()->json(['message' => 'Imagem não encontrada'], 404);
         }
-    
+
         $filePath = $user->image;
-    
+
         if (!Storage::disk('public')->exists($filePath)) {
             return response()->json(['message' => 'Arquivo não encontrado no servidor'], 404);
         }
-    
+
         return response()->file(storage_path('app/public/' . $filePath));
     }
-    
-      
 }

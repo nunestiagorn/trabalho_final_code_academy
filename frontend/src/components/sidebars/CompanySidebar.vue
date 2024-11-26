@@ -192,21 +192,9 @@ import ModalJob from "@/components/Modals/JobModal.vue";
 import "vue3-toastify/dist/index.css";
 import { toast } from "vue3-toastify";
 
-const vagaPublicada = () => {
-  toast("Vaga Publicada!", {
-    type: "success",
-    autoClose: 2500,
-    multiple: false,
-    position: "top-center",
-    toastStyle: {
-      fontSize: "22px",
-    },
-  });
-};
-
-const erroVagaPublicada = () => {
-  toast("Erro ao Publicar :(", {
-    type: "error",
+const Toast = (mensagem, type) => {
+  toast(mensagem, {
+    type: type,
     autoClose: 2500,
     multiple: false,
     position: "top-center",
@@ -305,30 +293,32 @@ export default {
         .put(`http://localhost:8001/api/companies/${this.company.id}`, {
           recruiter_name: this.company.recruiter_name,
         })
+        .then(() => {
+          Toast("Recrutador Atualizado!", "success");
+        })
         .catch((error) => {
           console.error("Erro ao atualizar recrutador:", error);
+          Toast("Erro ao atualizar Recrutador :(", "error")
         });
     },
     saveCompany() {
       if (!this.company.name.trim()) {
-        alert("Erro: O nome da empresa não pode estar vazio.");
+        Toast("O nome da empresa não pode estar vazio.", "error")
         return;
       }
 
       if (this.company.name.length < 6) {
-        alert("Erro: O nome da empresa deve ter pelo menos 6 caracteres.");
+        Toast("O nome da empresa deve ter pelo menos 6 caracteres.", "error")
         return;
       }
 
       if (!this.company.description.trim()) {
-        alert("Erro: A descrição da empresa não pode estar vazia.");
+        Toast("A descrição da empresa não pode estar vazia.", "error")
         return;
       }
 
       if (this.company.description.length < 20) {
-        alert(
-          "Erro: A descrição da empresa deve ter pelo menos 20 caracteres."
-        );
+        Toast("A descrição da empresa deve ter pelo menos 20 caracteres.", "error")
         return;
       }
 
@@ -337,8 +327,12 @@ export default {
           name: this.company.name,
           description: this.company.description,
         })
+        .then(() => {
+          Toast("Empresa Atualizada!", "success")
+        })
         .catch((error) => {
           console.error("Erro ao atualizar a empresa:", error);
+          Toast("Erro ao atualizar dados da empresa :(", "error")
         });
     },
     saveJob() {
@@ -350,11 +344,11 @@ export default {
           recruiter_name: this.company.recruiter_name,
         })
         .then(() => {
-          vagaPublicada();
+          Toast("Vaga publicada!", "success");
         })
         .catch((error) => {
           console.error("Erro ao criar vaga:", error);
-          erroVagaPublicada();
+          Toast("Erro ao publicar vaga :(", "error")
         });
     },
   },
