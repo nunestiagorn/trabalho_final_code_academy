@@ -25,6 +25,31 @@
                   {{ application.recruiterName }}
                 </h3>
               </div>
+              <div class="self-end -mb-4 mt-1 p-1">
+                <div
+                  class="flex items-center gap-2 text-red-500 font-bold text-xl"
+                  v-if="application.status === 'repproved'"
+                >
+                  <h2>Reprovado :(</h2>
+                  <X class="size-8" stroke-width="5" />
+                </div>
+
+                <div
+                  class="flex items-center gap-2 text-green-500 font-bold text-xl"
+                  v-if="application.status === 'approved'"
+                >
+                  <h2>Aprovado!!</h2>
+                  <Check class="size-8" stroke-width="5" />
+                </div>
+
+                <div
+                  class="flex items-center gap-2 text-orange-500 font-bold text-xl"
+                  v-if="application.status === 'pending'"
+                >
+                  <h2>Em Análise...</h2>
+                  <Hourglass class="size-8" stroke-width="4" />
+                </div>
+              </div>
             </div>
             <div
               :class="{
@@ -47,10 +72,14 @@
 import Sidebar from "@/components/sidebars/UserSidebar.vue";
 import axios from "axios";
 import { useRoute } from "vue-router";
+import { X, Check, Hourglass } from "lucide-vue-next";
 
 export default {
   components: {
     Sidebar,
+    X,
+    Check,
+    Hourglass,
   },
   data() {
     return {
