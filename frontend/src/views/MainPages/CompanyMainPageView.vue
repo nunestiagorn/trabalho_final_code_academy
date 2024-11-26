@@ -177,6 +177,20 @@ import ModalCandidate from "@/components/Modals/CandidateModal.vue";
 import axios from "axios";
 import { FileUser } from "lucide-vue-next";
 import { useRoute } from "vue-router";
+import "vue3-toastify/dist/index.css";
+import { toast } from "vue3-toastify";
+
+const Toast = (mensagem, type) => {
+  toast(mensagem, {
+    type: type,
+    autoClose: 2500,
+    multiple: false,
+    position: "top-center",
+    toastStyle: {
+      fontSize: "22px",
+    },
+  });
+};
 
 export default {
   components: {
@@ -277,18 +291,28 @@ export default {
           this.jobs = this.jobs.filter((job) => job.id !== this.selectedJob.id);
 
           this.closeModal();
-
-          alert("Vaga excluída com sucesso!");
+          Toast("Vaga excluída com sucesso!", "success");
         })
         .catch((error) => {
           console.error("Erro ao excluir a vaga:", error);
-          alert("Ocorreu um erro ao excluir a vaga.");
+          Toast("Ocorreu um erro ao excluir a vaga.", "error");
         });
     },
     editarVaga() {
+      const salarioNumerico = Number(
+        this.selectedJob.salary.replace(/\D/g, "")
+      );
+
+      if (salarioNumerico < 100000) {
+
+        Toast("O salário não pode ser menor que R$ 1.000,00", "error");
+        return; 
+      }
+
       axios
         .put(`http://localhost:8001/api/job_openings/${this.selectedJob.id}`, {
           description: this.selectedJob.description,
+          salary: this.selectedJob.salary,
         })
         .then((response) => {
           const updatedJob = this.jobs.find(
@@ -296,14 +320,15 @@ export default {
           );
           if (updatedJob) {
             updatedJob.description = this.selectedJob.description;
+            updatedJob.salary = this.selectedJob.salary;
           }
 
           this.closeModal();
-          alert("Vaga atualizada com sucesso!");
+          Toast("Vaga atualizada com sucesso!", "success");
         })
         .catch((error) => {
           console.error("Erro ao atualizar vaga:", error);
-          alert("Ocorreu um erro ao atualizar a vaga.");
+          Toast("Ocorreu um erro ao atualizar a vaga.", "error");
         });
     },
     formatSalary(event) {
@@ -313,6 +338,13 @@ export default {
       });
 
       this.selectedJob.salary = formatted;
+
+      if (salary < 100000) {
+        this.selectedJob.salary = "1.000,00";
+        Toast("O salário não pode ser menor que R$ 1.000,00", "error");
+      } else {
+        this.selectedJob.salary = formatted;
+      }
     },
   },
   created() {
