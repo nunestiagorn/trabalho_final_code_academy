@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('applications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->constrained('users');
-            $table->foreignId('opening_id')->nullable()->constrained('job_openings');
-            $table->foreignId('company_id')->nullable()->constrained('companies');
+            $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnDelete();
+            $table->foreignId('opening_id')->nullable()->constrained('job_openings')->cascadeOnDelete();
+            $table->foreignId('company_id')->nullable()->constrained('companies')->cascadeOnDelete();
             $table->string('recruiter_name')->nullable()->constrained('users');
             $table->timestamps();
         });
