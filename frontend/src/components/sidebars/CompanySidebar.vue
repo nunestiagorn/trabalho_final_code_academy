@@ -111,8 +111,8 @@
     <ModalCompany :visivel="VisivelCompany" @close="VisivelCompany = false">
       <template #headerCompany> Editar a empresa: {{ company.name }} </template>
       <template #bodyCompany>
-        <div class="flex flex-col gap-4">
-          <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-3">
+          <div class="flex flex-col gap-3">
             <p class="text-2xl font-bold">Altere o nome da Empresa:</p>
             <input
               v-model="company.name"
@@ -126,6 +126,10 @@
               class="p-2 rounded-lg outline-none shadow-lg"
               placeholder="Editar a descrição da Empresa..."
               maxlength="100"
+            />
+            <p class="text-2xl font-bold">Altere a foto de perfil da Empresa:</p>
+            <input
+
             />
           </div>
 
@@ -151,6 +155,13 @@
               class="p-2 rounded-lg outline-none shadow-lg"
               placeholder="Vaga..."
               maxlength="35"
+            />
+            <input
+              v-model="job.salary"
+              @input="formatSalary"
+              class="p-2 rounded-lg outline-none shadow-lg"
+              placeholder="Salário... (ex.: 1.500,00)"
+              maxlength="14"
             />
             <p class="text-2xl font-bold">Insira a descrição da vaga:</p>
             <textarea
@@ -192,21 +203,9 @@ import ModalJob from "@/components/Modals/JobModal.vue";
 import "vue3-toastify/dist/index.css";
 import { toast } from "vue3-toastify";
 
-const vagaPublicada = () => {
-  toast("Vaga Publicada!", {
-    type: "success",
-    autoClose: 2500,
-    multiple: false,
-    position: "top-center",
-    toastStyle: {
-      fontSize: "22px",
-    },
-  });
-};
-
-const erroVagaPublicada = () => {
-  toast("Erro ao Publicar :(", {
-    type: "error",
+const Toast = (mensagem, type) => {
+  toast(mensagem, {
+    type: type,
     autoClose: 2500,
     multiple: false,
     position: "top-center",
@@ -241,6 +240,7 @@ export default {
         id: "",
         name: "",
         description: "",
+        salary: "",
         company_id: "",
         recruiter_name: "",
       },
@@ -286,18 +286,22 @@ export default {
         id: "",
         name: "",
         description: "",
+        salary: "",
         company_id: this.company.id,
         recruiter_name: this.company.recruiter_name,
       };
     },
     editRecruiter() {
       if (!this.company.recruiter_name.trim()) {
-        alert("Erro: O nome do recrutador não pode estar vazio.");
+        Toast("Erro: O nome do recrutador não pode estar vazio.", "error");
         return;
       }
 
       if (this.company.recruiter_name.length < 3) {
-        alert("Erro: O nome do recrutador deve ter pelo menos 3 caracteres.");
+        Toast(
+          "Erro: O nome do recrutador deve ter pelo menos 3 caracteres.",
+          "error"
+        );
         return;
       }
 
@@ -305,29 +309,34 @@ export default {
         .put(`http://localhost:8001/api/companies/${this.company.id}`, {
           recruiter_name: this.company.recruiter_name,
         })
+        .then(() => {
+          Toast("Recrutador Atualizado!", "success");
+        })
         .catch((error) => {
           console.error("Erro ao atualizar recrutador:", error);
+          Toast("Erro ao atualizar Recrutador :(", "error");
         });
     },
     saveCompany() {
       if (!this.company.name.trim()) {
-        alert("Erro: O nome da empresa não pode estar vazio.");
+        Toast("O nome da empresa não pode estar vazio.", "error");
         return;
       }
 
       if (this.company.name.length < 6) {
-        alert("Erro: O nome da empresa deve ter pelo menos 6 caracteres.");
+        Toast("O nome da empresa deve ter pelo menos 6 caracteres.", "error");
         return;
       }
 
       if (!this.company.description.trim()) {
-        alert("Erro: A descrição da empresa não pode estar vazia.");
+        Toast("A descrição da empresa não pode estar vazia.", "error");
         return;
       }
 
       if (this.company.description.length < 20) {
-        alert(
-          "Erro: A descrição da empresa deve ter pelo menos 20 caracteres."
+        Toast(
+          "A descrição da empresa deve ter pelo menos 20 caracteres.",
+          "error"
         );
         return;
       }
@@ -337,8 +346,12 @@ export default {
           name: this.company.name,
           description: this.company.description,
         })
+        .then(() => {
+          Toast("Empresa Atualizada!", "success");
+        })
         .catch((error) => {
           console.error("Erro ao atualizar a empresa:", error);
+          Toast("Erro ao atualizar dados da empresa :(", "error");
         });
     },
     saveJob() {
@@ -346,16 +359,27 @@ export default {
         .post(`http://localhost:8001/api/job_openings/`, {
           name: this.job.name,
           description: this.job.description,
+          salary: this.job.salary,
           company_id: this.company.id,
           recruiter_name: this.company.recruiter_name,
         })
         .then(() => {
-          vagaPublicada();
+          Toast("Vaga publicada!", "success");
         })
         .catch((error) => {
           console.error("Erro ao criar vaga:", error);
-          erroVagaPublicada();
+          Toast("Erro ao publicar vaga :(", "error");
         });
+    },
+    formatSalary(event) {
+      const value = event.target.value.replace(/\D/g, "");
+      const formatted = (Number(value) / 100).toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+        maximumFractionDigits: 2,
+      });
+
+      this.job.salary = formatted.replace("R$", "R$ ");
     },
   },
 };

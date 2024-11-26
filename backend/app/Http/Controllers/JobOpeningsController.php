@@ -47,7 +47,7 @@ class JobOpeningsController extends Controller
         $opening->name = $req->name ?? $opening->name;
         $opening->description = $req->description ?? $opening->description;
         $opening->salary = $req->salary ?? $opening->salary;
-        
+
         $opening->save();
 
         return response("Success", 200);

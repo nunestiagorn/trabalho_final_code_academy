@@ -59,10 +59,7 @@
       </div>
     </section>
 
-    <ModalUser
-      :visivel="VisivelUser"
-      @close="VisivelUser = false"
-    >
+    <ModalUser :visivel="VisivelUser" @close="VisivelUser = false">
       <template #headerUser>
         Editar o Recrutador da empresa: {{ user.name }}
       </template>
@@ -75,6 +72,12 @@
               class="p-2 rounded-lg outline-none shadow-lg"
               placeholder="Editar nome..."
               maxlength="25"
+            />
+            <p class="text-2xl font-bold">Altere o sua foto de perfil:</p>
+            <input
+              v-model="user.image"
+              class="p-2 rounded-lg outline-none shadow-lg"
+              accept="image/*"
             />
           </div>
 
@@ -101,10 +104,24 @@ import {
   UserCog,
   Building2,
 } from "lucide-vue-next";
-import ModalUser from '../Modals/UserModal.vue'
+import ModalUser from "../Modals/UserModal.vue";
 
 import axios from "axios";
 import { RouterLink } from "vue-router";
+import "vue3-toastify/dist/index.css";
+import { toast } from "vue3-toastify";
+
+const Toast = (mensagem, type) => {
+  toast(mensagem, {
+    type: type,
+    autoClose: 2500,
+    multiple: false,
+    position: "top-center",
+    toastStyle: {
+      fontSize: "22px",
+    },
+  });
+};
 
 export default {
   components: {
@@ -122,6 +139,7 @@ export default {
       user: {
         name: "",
         email: "",
+        image: "",
       },
       VisivelUser: false,
     };
@@ -155,9 +173,14 @@ export default {
       axios
         .put(`http://localhost:8001/api/users/${testeId}`, {
           name: this.user.name,
+          image: this.user.image,
+        })
+        .then(() => {
+          Toast("Usuário Atualizado!", "success");
         })
         .catch((error) => {
           console.error("Erro ao atualizar usuário:", error);
+          Toast("Falha ao atualizar usuário :(", "error");
         });
     },
     Sair() {

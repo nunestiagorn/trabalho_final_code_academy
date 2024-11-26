@@ -76,7 +76,23 @@
             </div>
             <span>Recrutador: {{ selectedJob.recruiter }}</span>
           </div>
-          <h2 class="-mb-3 ml-2 mt-4">Detalhes da vaga:</h2>
+
+          <hr class="w-full border-b-2 border-gray-800 rounded-full" />
+
+          <div class="flex gap-2 items-center text-xl -mb-3 ml-2">
+            <h2 class="">Salário:</h2>
+            <input
+              type="text"
+              @input="formatSalary"
+              v-model="selectedJob.salary"
+              placeholder="Salário da vaga..."
+              maxlength="10"
+              minlength="4"
+              class="p-2 w-5/12 bg-gray-300 text-gray-900 text-lg shadow-[inset_0_0_12px_-2px_rgba(0,0,0,0.75)] rounded-lg"
+            />
+          </div>
+
+          <h2 class="ml-2">Detalhes da vaga:</h2>
           <textarea
             type="text"
             v-model="selectedJob.description"
@@ -128,20 +144,23 @@
           <div
             v-for="candidate in candidates"
             :key="candidate.id"
-            class="flex justify-between items-center p-2 border-b"
+            class="flex justify-between items-center p-2 border-b-2 border-black"
           >
             <div class="flex gap-2 items-center">
               <span class="font-semibold">| {{ candidate.userName }}</span>
               <p class="text-gray-600 text-sm">{{ candidate.userEmail }}</p>
             </div>
 
-            <div class="flex flex-col">
-              <h2>Status: {{ statusVaga }}</h2>
-              <select v-model="statusVaga">
-                <option disabled value="">Status</option>
-                <option>Em Análise</option>
-                <option>Aprovado</option>
-                <option>Reprovado</option>
+            <div class="flex gap-2 items-center">
+              <h2>Status: </h2>
+              <select
+                v-model="candidate.status"
+                @change="updateStatus(candidate)"
+                class="py-1 px-2 rounded-full focus:outline-none"
+              >
+                <option value="pending">Pendente</option>
+                <option value="approved">Aprovado</option>
+                <option value="repproved">Rejeitado</option>
               </select>
             </div>
           </div>
@@ -161,6 +180,20 @@ import ModalCandidate from "@/components/Modals/CandidateModal.vue";
 import axios from "axios";
 import { FileUser } from "lucide-vue-next";
 import { useRoute } from "vue-router";
+import "vue3-toastify/dist/index.css";
+import { toast } from "vue3-toastify";
+
+const Toast = (mensagem, type) => {
+  toast(mensagem, {
+    type: type,
+    autoClose: 2500,
+    multiple: false,
+    position: "top-center",
+    toastStyle: {
+      fontSize: "22px",
+    },
+  });
+};
 
 export default {
   components: {
@@ -236,7 +269,26 @@ export default {
         console.error("Erro ao buscar os candidatos:", error);
       }
     },
+    async updateStatus(candidate) {
+      try {
+        const response = await axios.put(
+          `http://localhost:8001/api/applications/${candidate.id}`,
+          {
+            status: candidate.status,
+          }
+        );
 
+        const index = this.candidates.findIndex((c) => c.id === candidate.id);
+        if (index !== -1) {
+          this.candidates[index].status = candidate.status;
+        }
+
+        Toast("Status atualizado com sucesso!", "success");
+      } catch (error) {
+        console.error("Erro ao atualizar o status do candidato:", error);
+        Toast("Erro ao atualizar o status do candidato :(", "error");
+      }
+    },
     abrirModalJobDetails(job) {
       this.selectedJob = job;
       this.VisivelJobDetail = true;
@@ -253,7 +305,6 @@ export default {
         console.error("Nenhuma vaga selecionada.");
       }
     },
-
     excluirVaga() {
       axios
         .delete(`http://localhost:8001/api/job_openings/${this.selectedJob.id}`)
@@ -261,18 +312,27 @@ export default {
           this.jobs = this.jobs.filter((job) => job.id !== this.selectedJob.id);
 
           this.closeModal();
-
-          alert("Vaga excluída com sucesso!");
+          Toast("Vaga excluída com sucesso!", "success");
         })
         .catch((error) => {
           console.error("Erro ao excluir a vaga:", error);
-          alert("Ocorreu um erro ao excluir a vaga.");
+          Toast("Ocorreu um erro ao excluir a vaga.", "error");
         });
     },
     editarVaga() {
+      const salarioNumerico = Number(
+        this.selectedJob.salary.replace(/\D/g, "")
+      );
+
+      if (salarioNumerico < 100000) {
+        Toast("O salário não pode ser menor que R$ 1.000,00", "error");
+        return;
+      }
+
       axios
         .put(`http://localhost:8001/api/job_openings/${this.selectedJob.id}`, {
           description: this.selectedJob.description,
+          salary: this.selectedJob.salary,
         })
         .then((response) => {
           const updatedJob = this.jobs.find(
@@ -280,15 +340,31 @@ export default {
           );
           if (updatedJob) {
             updatedJob.description = this.selectedJob.description;
+            updatedJob.salary = this.selectedJob.salary;
           }
 
           this.closeModal();
-          alert("Vaga atualizada com sucesso!");
+          Toast("Vaga atualizada com sucesso!", "success");
         })
         .catch((error) => {
           console.error("Erro ao atualizar vaga:", error);
-          alert("Ocorreu um erro ao atualizar a vaga.");
+          Toast("Ocorreu um erro ao atualizar a vaga.", "error");
         });
+    },
+    formatSalary(event) {
+      const value = event.target.value.replace(/\D/g, "");
+      const formatted = (Number(value) / 100).toLocaleString("pt-BR", {
+        maximumFractionDigits: 2,
+      });
+
+      this.selectedJob.salary = formatted;
+
+      if (salary < 100000) {
+        this.selectedJob.salary = "1.000,00";
+        Toast("O salário não pode ser menor que R$ 1.000,00", "error");
+      } else {
+        this.selectedJob.salary = formatted;
+      }
     },
   },
   created() {
