@@ -27,7 +27,12 @@
               </div>
             </div>
             <div
-              class="absolute rounded-b-lg border-t-2 border-black bottom-0 left-0 w-full h-[0.85rem] bg-orange-500"
+              :class="{
+                'bg-orange-500': application.status === 'pending',
+                'bg-green-500': application.status === 'approved',
+                'bg-red-500': application.status === 'repproved',
+              }"
+              class="absolute rounded-b-lg border-t-2 border-black bottom-0 left-0 w-full h-[0.85rem]"
             ></div>
           </div>
         </div>

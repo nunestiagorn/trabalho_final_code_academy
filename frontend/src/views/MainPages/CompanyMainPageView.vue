@@ -144,20 +144,23 @@
           <div
             v-for="candidate in candidates"
             :key="candidate.id"
-            class="flex justify-between items-center p-2 border-b"
+            class="flex justify-between items-center p-2 border-b-2 border-black"
           >
             <div class="flex gap-2 items-center">
               <span class="font-semibold">| {{ candidate.userName }}</span>
               <p class="text-gray-600 text-sm">{{ candidate.userEmail }}</p>
             </div>
 
-            <div class="flex flex-col">
-              <h2>Status: {{ statusVaga }}</h2>
-              <select v-model="statusVaga">
-                <option disabled value="">Status</option>
-                <option>Em Análise</option>
-                <option>Aprovado</option>
-                <option>Reprovado</option>
+            <div class="flex gap-2 items-center">
+              <h2>Status: </h2>
+              <select
+                v-model="candidate.status"
+                @change="updateStatus(candidate)"
+                class="py-1 px-2 rounded-full focus:outline-none"
+              >
+                <option value="pending">Pendente</option>
+                <option value="approved">Aprovado</option>
+                <option value="repproved">Rejeitado</option>
               </select>
             </div>
           </div>
@@ -266,7 +269,26 @@ export default {
         console.error("Erro ao buscar os candidatos:", error);
       }
     },
+    async updateStatus(candidate) {
+      try {
+        const response = await axios.put(
+          `http://localhost:8001/api/applications/${candidate.id}`,
+          {
+            status: candidate.status,
+          }
+        );
 
+        const index = this.candidates.findIndex((c) => c.id === candidate.id);
+        if (index !== -1) {
+          this.candidates[index].status = candidate.status;
+        }
+
+        Toast("Status atualizado com sucesso!", "success");
+      } catch (error) {
+        console.error("Erro ao atualizar o status do candidato:", error);
+        Toast("Erro ao atualizar o status do candidato :(", "error");
+      }
+    },
     abrirModalJobDetails(job) {
       this.selectedJob = job;
       this.VisivelJobDetail = true;
@@ -283,7 +305,6 @@ export default {
         console.error("Nenhuma vaga selecionada.");
       }
     },
-
     excluirVaga() {
       axios
         .delete(`http://localhost:8001/api/job_openings/${this.selectedJob.id}`)
@@ -304,9 +325,8 @@ export default {
       );
 
       if (salarioNumerico < 100000) {
-
         Toast("O salário não pode ser menor que R$ 1.000,00", "error");
-        return; 
+        return;
       }
 
       axios
