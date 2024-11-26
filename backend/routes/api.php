@@ -29,6 +29,8 @@ Route::get('companies/{id}', [CompaniesController::class, "show"]);
 Route::delete('companies/{id}', [CompaniesController::class, "delete"]);
 Route::post('companies/login', [CompaniesController::class, "check"]);
 
+Route::get('/companies/{id}/image', [CompaniesController::class, 'showImage']);
+
 
 //rotas de vagas
 Route::get('job_openings', [JobOpeningsController::class, "index"]);

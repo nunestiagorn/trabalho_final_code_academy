@@ -14,6 +14,7 @@ class Companies extends Model
         'cnpj',
         'password',
         'description',
+        'image',
     ];
 
     protected $hidden = [
