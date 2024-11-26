@@ -60,6 +60,7 @@ class ApplicationsController extends Controller
     {
         $application = Applications::find($req->id);
         $application->recruiter_name = $req->recruiter_name ?? $application->recruiter_name;
+        $application->status = $req->status ?? $application->status;
 
         $application->save();
 

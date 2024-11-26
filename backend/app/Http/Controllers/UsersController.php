@@ -49,6 +49,23 @@ class UsersController extends Controller
             'user' => $user,
         ]);
     }
+
+
+    public function check(Request $req)
+    {
+        $credentials = $req->only('email', 'password');
+    
+        if (!Auth::attempt($credentials)) {
+            return response()->json(['status' => false, 'message' => 'Credenciais inválidas'], 401);
+        }
+    
+        $user = Auth::user();
+    
+        return response()->json([
+            'status' => true, 'message' => 'Login realizado com sucesso',
+            'user' => $user,
+        ]);
+    }
     
     public function update(Request $req)
     {
