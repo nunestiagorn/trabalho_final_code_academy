@@ -152,6 +152,13 @@
               placeholder="Vaga..."
               maxlength="35"
             />
+            <input
+              v-model="job.salary"
+              @input="formatSalary"
+              class="p-2 rounded-lg outline-none shadow-lg"
+              placeholder="Salário... (ex.: 1.500,00)"
+              maxlength="14"
+            />
             <p class="text-2xl font-bold">Insira a descrição da vaga:</p>
             <textarea
               v-model="job.description"
@@ -229,6 +236,7 @@ export default {
         id: "",
         name: "",
         description: "",
+        salary: "",
         company_id: "",
         recruiter_name: "",
       },
@@ -274,18 +282,22 @@ export default {
         id: "",
         name: "",
         description: "",
+        salary: "",
         company_id: this.company.id,
         recruiter_name: this.company.recruiter_name,
       };
     },
     editRecruiter() {
       if (!this.company.recruiter_name.trim()) {
-        alert("Erro: O nome do recrutador não pode estar vazio.");
+        Toast("Erro: O nome do recrutador não pode estar vazio.", "error");
         return;
       }
 
       if (this.company.recruiter_name.length < 3) {
-        alert("Erro: O nome do recrutador deve ter pelo menos 3 caracteres.");
+        Toast(
+          "Erro: O nome do recrutador deve ter pelo menos 3 caracteres.",
+          "error"
+        );
         return;
       }
 
@@ -298,27 +310,30 @@ export default {
         })
         .catch((error) => {
           console.error("Erro ao atualizar recrutador:", error);
-          Toast("Erro ao atualizar Recrutador :(", "error")
+          Toast("Erro ao atualizar Recrutador :(", "error");
         });
     },
     saveCompany() {
       if (!this.company.name.trim()) {
-        Toast("O nome da empresa não pode estar vazio.", "error")
+        Toast("O nome da empresa não pode estar vazio.", "error");
         return;
       }
 
       if (this.company.name.length < 6) {
-        Toast("O nome da empresa deve ter pelo menos 6 caracteres.", "error")
+        Toast("O nome da empresa deve ter pelo menos 6 caracteres.", "error");
         return;
       }
 
       if (!this.company.description.trim()) {
-        Toast("A descrição da empresa não pode estar vazia.", "error")
+        Toast("A descrição da empresa não pode estar vazia.", "error");
         return;
       }
 
       if (this.company.description.length < 20) {
-        Toast("A descrição da empresa deve ter pelo menos 20 caracteres.", "error")
+        Toast(
+          "A descrição da empresa deve ter pelo menos 20 caracteres.",
+          "error"
+        );
         return;
       }
 
@@ -328,11 +343,11 @@ export default {
           description: this.company.description,
         })
         .then(() => {
-          Toast("Empresa Atualizada!", "success")
+          Toast("Empresa Atualizada!", "success");
         })
         .catch((error) => {
           console.error("Erro ao atualizar a empresa:", error);
-          Toast("Erro ao atualizar dados da empresa :(", "error")
+          Toast("Erro ao atualizar dados da empresa :(", "error");
         });
     },
     saveJob() {
@@ -340,6 +355,7 @@ export default {
         .post(`http://localhost:8001/api/job_openings/`, {
           name: this.job.name,
           description: this.job.description,
+          salary: this.job.salary,
           company_id: this.company.id,
           recruiter_name: this.company.recruiter_name,
         })
@@ -348,8 +364,18 @@ export default {
         })
         .catch((error) => {
           console.error("Erro ao criar vaga:", error);
-          Toast("Erro ao publicar vaga :(", "error")
+          Toast("Erro ao publicar vaga :(", "error");
         });
+    },
+    formatSalary(event) {
+      const value = event.target.value.replace(/\D/g, "");
+      const formatted = (Number(value) / 100).toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+        maximumFractionDigits: 2,
+      });
+
+      this.job.salary = formatted.replace("R$", "R$ ");
     },
   },
 };

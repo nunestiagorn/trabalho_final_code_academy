@@ -105,6 +105,20 @@ import ModalUser from '../Modals/UserModal.vue'
 
 import axios from "axios";
 import { RouterLink } from "vue-router";
+import "vue3-toastify/dist/index.css";
+import { toast } from "vue3-toastify";
+
+const Toast = (mensagem, type) => {
+  toast(mensagem, {
+    type: type,
+    autoClose: 2500,
+    multiple: false,
+    position: "top-center",
+    toastStyle: {
+      fontSize: "22px",
+    },
+  });
+};
 
 export default {
   components: {
@@ -156,8 +170,12 @@ export default {
         .put(`http://localhost:8001/api/users/${testeId}`, {
           name: this.user.name,
         })
+        .then(() => {
+          Toast("Usuário Atualizado!", "success")
+        })
         .catch((error) => {
           console.error("Erro ao atualizar usuário:", error);
+          Toast("Falha ao atualizar usuário :(", "error")
         });
     },
     Sair() {
