@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('description');
-            $table->integer('salary');
+            $table->string('salary');
             $table->foreignId('company_id')->nullable()->constrained('companies')->cascadeOnDelete();   
             $table->string('recruiter_name')->nullable()->constrained('users');
             $table->timestamps();
