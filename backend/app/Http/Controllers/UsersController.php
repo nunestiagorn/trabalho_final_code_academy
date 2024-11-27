@@ -62,7 +62,8 @@ class UsersController extends Controller
         $user = Auth::user();
 
         return response()->json([
-            'status' => true, 'message' => 'Login realizado com sucesso',
+            'status' => true,
+            'message' => 'Login realizado com sucesso',
             'user' => $user,
         ]);
     }
@@ -148,5 +149,36 @@ class UsersController extends Controller
         }
 
         return response()->file(storage_path('app/public/' . $filePath));
+    }
+
+    public function updateImage(Request $req, $id)
+    {
+        $user = Users::find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'Usuário não encontrado'], 404);
+        }
+
+        $validator = Validator::make($req->all(), [
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        if ($user->image) {
+
+            Storage::disk('public')->delete($user->image);
+        }
+
+        $imagePath = $req->file('image')->store('users', 'public');
+        $user->image = $imagePath;
+        $user->save();
+
+        return response()->json([
+            'message' => 'Imagem atualizada com sucesso!',
+            'image_url' => asset('storage/' . $imagePath),
+        ], 200);
     }
 }

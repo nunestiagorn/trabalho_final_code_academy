@@ -17,6 +17,7 @@ Route::get('users/{id}', [UsersController::class, "show"]);
 Route::delete('users/{id}', [UsersController::class, "delete"]);
 Route::post('users/login', [UsersController::class, "check"]);
 
+Route::post('/users/{id}/image', [UsersController::class, 'updateImage']);
 Route::get('/users/{id}/image', [UsersController::class, 'showImage']);
 
 
