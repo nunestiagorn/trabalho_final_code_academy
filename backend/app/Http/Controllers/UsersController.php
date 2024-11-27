@@ -95,6 +95,8 @@ class UsersController extends Controller
     
         $user->name = $req->name ?? $user->name;
         $user->email = $req->email ?? $user->email;
+        $user->image = $req->image ?? $user->image;
+        
         if ($req->filled('password')) {
             $user->password = Hash::make($req->password);
         }

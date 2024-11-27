@@ -79,9 +79,9 @@ class CompaniesController extends Controller
                 Storage::disk('public')->delete($company->image);
             }
     
-            $company->image = $req->file('image')->store('companies', 'public');
+            $company->image = $req->file('image')->store('companies', 'public')  ?? $company->image;;
         }
-    
+
         $company->save();
     
         return response()->json([
