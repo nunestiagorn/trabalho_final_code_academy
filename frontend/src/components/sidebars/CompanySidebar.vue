@@ -4,10 +4,11 @@
       <div class="flex flex-col gap-3 items-center">
         <h3 class="text-zinc-600 text-md -mt-1">CNPJ: {{ company.cnpj }}</h3>
         <img
-          src="@/assets/images/company.png"
+          :src="company.image ? company.image : '@/assets/images/company.png'"
           alt="foto da empresa"
           class="size-16 rounded-full"
         />
+
         <div
           class="-mt-1.5 flex flex-col text-black capitalize items-center gap-1"
         >
@@ -127,9 +128,14 @@
               placeholder="Editar a descrição da Empresa..."
               maxlength="100"
             />
-            <p class="text-2xl font-bold">Altere a foto de perfil da Empresa:</p>
+            <p class="text-2xl font-bold">
+              Altere a foto de perfil da Empresa:
+            </p>
             <input
-
+              type="file"
+              @change="handleImageUpload"
+              accept="image/*"
+              class="p-2 rounded-lg outline-none shadow-lg"
             />
           </div>
 
@@ -265,6 +271,9 @@ export default {
             name: data.name,
             recruiter_name: data.recruiter_name,
             description: data.description,
+            image: data.image
+              ? `http://localhost:8001/api/companies/${companyId}/image`
+              : "@/assets/images/company.png",
           };
         })
         .catch((error) => {
@@ -316,6 +325,31 @@ export default {
           console.error("Erro ao atualizar recrutador:", error);
           Toast("Erro ao atualizar Recrutador :(", "error");
         });
+    },
+    handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const formData = new FormData();
+        formData.append("image", file);
+
+        const companyId = this.$route.params.id;
+        axios
+          .post(
+            `http://localhost:8001/api/companies/${companyId}/image`,
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          )
+          .then(() => {
+            this.LoggedCompany();
+          })
+          .catch((error) => {
+            console.error("Erro ao atualizar a imagem da empresa:", error);
+          });
+      }
     },
     saveCompany() {
       if (!this.company.name.trim()) {

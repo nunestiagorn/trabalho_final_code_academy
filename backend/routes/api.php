@@ -17,6 +17,7 @@ Route::get('users/{id}', [UsersController::class, "show"]);
 Route::delete('users/{id}', [UsersController::class, "delete"]);
 Route::post('users/login', [UsersController::class, "check"]);
 
+Route::post('/users/{id}/image', [UsersController::class, 'updateImage']);
 Route::get('/users/{id}/image', [UsersController::class, 'showImage']);
 
 
@@ -30,6 +31,7 @@ Route::delete('companies/{id}', [CompaniesController::class, "delete"]);
 Route::post('companies/login', [CompaniesController::class, "check"]);
 
 Route::get('/companies/{id}/image', [CompaniesController::class, 'showImage']);
+Route::post('/companies/{id}/image', [CompaniesController::class, 'updateImage']);
 
 
 //rotas de vagas

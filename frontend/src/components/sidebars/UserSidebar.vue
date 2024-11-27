@@ -3,7 +3,11 @@
     <div class="flex flex-col pt-4">
       <div class="flex gap-4 items-center">
         <img
-          src="@/assets/images/user.png"
+          :src="
+            user.image
+              ? `http://localhost:8001/api/users/${userId}/image`
+              : '@/assets/images/user.png'
+          "
           alt="foto do usuário"
           class="w-14 h-14 rounded-full"
         />
@@ -75,7 +79,8 @@
             />
             <p class="text-2xl font-bold">Altere o sua foto de perfil:</p>
             <input
-              v-model="user.image"
+              type="file"
+              @change="onFileChange"
               class="p-2 rounded-lg outline-none shadow-lg"
               accept="image/*"
             />
@@ -160,6 +165,9 @@ export default {
         .then(({ data }) => {
           this.user.name = data.name;
           this.user.email = data.email;
+          if (data.image) {
+            this.user.image = `http://localhost:8001/api/users/${userId}/image`;
+          }
         })
         .catch((error) => {
           console.error("Erro ao buscar usuário:", error);
@@ -168,19 +176,36 @@ export default {
     abrirModal() {
       this.VisivelUser = true;
     },
+    onFileChange(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const formData = new FormData();
+        formData.append("image", file);
+
+        const userId = this.$route.params.id;
+        axios
+          .post(`http://localhost:8001/api/users/${userId}/image`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .catch((error) => {
+            console.error("Erro ao atualizar a imagem:", error);
+            Toast("Falha ao atualizar a imagem :(", "error");
+          });
+      }
+    },
     saveUser() {
-      const testeId = this.$route.params.id;
+      const userId = this.$route.params.id;
       axios
-        .put(`http://localhost:8001/api/users/${testeId}`, {
+        .put(`http://localhost:8001/api/users/${userId}`, {
           name: this.user.name,
-          image: this.user.image,
         })
         .then(() => {
-          Toast("Usuário Atualizado!", "success");
+          Toast("Usuário atualizado!", "success");
         })
         .catch((error) => {
           console.error("Erro ao atualizar usuário:", error);
-          Toast("Falha ao atualizar usuário :(", "error");
         });
     },
     Sair() {
