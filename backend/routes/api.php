@@ -31,6 +31,7 @@ Route::delete('companies/{id}', [CompaniesController::class, "delete"]);
 Route::post('companies/login', [CompaniesController::class, "check"]);
 
 Route::get('/companies/{id}/image', [CompaniesController::class, 'showImage']);
+Route::post('/companies/{id}/image', [CompaniesController::class, 'updateImage']);
 
 
 //rotas de vagas

@@ -24,7 +24,7 @@ class CompaniesController extends Controller
             'cnpj' => 'required|string|max:20|unique:companies',
             'description' => 'required|string|max:500',
             'password' => 'required|string|min:6',
-            // 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
 
@@ -32,11 +32,11 @@ class CompaniesController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        // $imagePath = null;
+        $imagePath = null;
 
-        //  if ($req->hasFile('image')) {
-        //      $imagePath = $req->file('image')->store('companies', 'public');
-        // }
+        if ($req->hasFile('image')) {
+            $imagePath = $req->file('image')->store('companies', 'public');
+        }
 
         $company = Companies::create([
             'name' => $req->name,
@@ -44,12 +44,13 @@ class CompaniesController extends Controller
             'password' => Hash::make($req->password),
             'description' => $req->description,
             'recruiter_name' => $req->recruiter_name ?? 'Recrutador',
-            // 'image' => $imagePath
+            'image' => $imagePath
         ]);
 
         return response()->json([
             'status' => true,
             'message' => "Registration Success",
+            'company' => $company,
         ]);
     }
 
@@ -159,4 +160,33 @@ class CompaniesController extends Controller
         return response()->file(storage_path('app/public/' . $company->image));
     }
 
+    public function updateImage(Request $req, $id)
+    {
+        $company = Companies::find($id);
+
+        if (!$company) {
+            return response()->json(['message' => 'Empresa não encontrada'], 404);
+        }
+
+        $validator = Validator::make($req->all(), [
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        if ($company->image) {
+            Storage::disk('public')->delete($company->image);
+        }
+
+        $imagePath = $req->file('image')->store('companies', 'public');
+        $company->image = $imagePath;
+        $company->save();
+
+        return response()->json([
+            'message' => 'Imagem atualizada com sucesso!',
+            'image_url' => asset('storage/' . $imagePath),
+        ], 200);
+    }
 }
