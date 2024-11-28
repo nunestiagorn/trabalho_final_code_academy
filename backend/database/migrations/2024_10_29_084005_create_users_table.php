@@ -18,6 +18,7 @@ return new class extends Migration
             $table->enum('role', ['admin', 'recruiter', 'candidate']);
             $table->string('password');
             $table->foreignId('company_id')->nullable()->constrained('companies')->cascadeOnDelete();
+            $table->timestamp('email_verified_at')->nullable();
             $table->timestamps();
         });
     }
