@@ -8,9 +8,13 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Notifications\Notifiable;
 
 class UsersController extends Controller
 {
+    use Notifiable;
+    
     public function index()
     {
         return Users::all();
@@ -42,6 +46,8 @@ class UsersController extends Controller
             'password' => Hash::make($req->password),
             'image' => $imagePath,
         ]);
+
+        event(new Registered($user));
 
         return response()->json([
             'status' => true,
