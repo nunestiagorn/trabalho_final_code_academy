@@ -27,10 +27,6 @@ class UsersController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
-
-        if ($validator->fails()) {
             if ($validator->errors()->has('email')) {
                 return response()->json([
                     'status' => false,

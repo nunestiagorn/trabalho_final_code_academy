@@ -184,8 +184,8 @@ export default {
     };
   },
   methods: {
-
-    if (!this.users.email.trim()) {
+    LoginUser() {
+      if (!this.users.email.trim()) {
         Toast("O campo Email deve ser preenchido.", "error");
         return;
       }
@@ -194,7 +194,6 @@ export default {
         return;
       }
 
-    LoginUser() {
       axios
         .post(`http://localhost:8001/api/users/login`, this.users)
         .then(({ data }) => {

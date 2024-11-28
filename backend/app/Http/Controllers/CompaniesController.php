@@ -27,8 +27,14 @@ class CompaniesController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-
         if ($validator->fails()) {
+            if ($validator->errors()->has('cnpj')) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'cnpj já está cadastrado no sistema.',
+                ], 400);
+            }
+
             return response()->json($validator->errors(), 400);
         }
 

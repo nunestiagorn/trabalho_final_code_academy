@@ -6,7 +6,10 @@
       <h1 class="text-5xl py-4 font-bold drop-shadow-textShadow2">
         Suas Candidaturas
       </h1>
-      <div class="flex gap-4 flex-wrap justify-center">
+      <div
+        v-if="applications.length > 0"
+        class="flex gap-4 flex-wrap justify-center"
+      >
         <div v-for="application in applications" :key="application.id">
           <div
             @click.prevent="abrirModalJobDetails(application)"
@@ -62,6 +65,16 @@
           </div>
         </div>
       </div>
+      <div v-else>
+        <p class="text-2xl font-bold mt-16 text-center">
+          Opa! Parece que você ainda não se candidatou para nenhuma vaga
+          disponível!
+        </p>
+        <div class="absolute right-72 top-[16.35rem] flex gap-2 items-center text-2xl font-bold">
+          <p>Candidate-se Aqui!</p>
+          <ArrowRight class="size-16"/>
+        </div>
+      </div>
     </section>
 
     <Sidebar />
@@ -72,7 +85,7 @@
 import Sidebar from "@/components/sidebars/UserSidebar.vue";
 import axios from "axios";
 import { useRoute } from "vue-router";
-import { X, Check, Hourglass } from "lucide-vue-next";
+import { X, Check, Hourglass, ArrowRight } from "lucide-vue-next";
 
 export default {
   components: {
@@ -80,6 +93,7 @@ export default {
     X,
     Check,
     Hourglass,
+    ArrowRight,
   },
   data() {
     return {
