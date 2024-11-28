@@ -19,7 +19,8 @@ Route::post('users/login', [UsersController::class, "check"]);
 Route::post('/users/{id}/image', [UsersController::class, 'updateImage']);
 Route::get('/users/{id}/image', [UsersController::class, 'showImage']);
 
-
+Route::post('/users/{id}/image', [UsersController::class, 'updateCurriculum']);
+Route::get('/users/{id}/image', [UsersController::class, 'showCurruculum']);
 
 //rotas de empresas
 Route::get('companies', [CompaniesController::class, "index"]);
