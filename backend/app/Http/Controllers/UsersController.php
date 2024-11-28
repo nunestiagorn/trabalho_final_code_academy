@@ -28,6 +28,7 @@ class UsersController extends Controller
             'role' => 'required|in:admin,recruiter,candidate',
             'password' => 'required|string|min:6',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'curriculum' => 'nullable|file|mimes:pdf|max:10240'
         ]);
 
         if ($validator->fails()) {
@@ -97,6 +98,7 @@ class UsersController extends Controller
             'email' => 'sometimes|required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:6|confirmed',
             'image' => 'nullable|string',
+            'curriculum' => 'nullable|string'
         ]);
 
         if ($validator->fails()) {
@@ -197,4 +199,54 @@ class UsersController extends Controller
             'image_url' => asset('storage/' . $imagePath),
         ], 200);
     }
+
+    public function showCurriculum($id)
+    {
+        $user = Users::find($id);
+
+        if (!$user || !$user->curriculum) {
+            return response()->json(['message' => 'Currículo não encontrado'], 404);
+        }
+
+        $filePath = $user->curriculum;
+
+        if (!Storage::disk('public')->exists($filePath)) {
+            return response()->json(['message' => 'Arquivo não encontrado no servidor'], 404);
+        }
+
+        return response()->file(storage_path('app/public/' . $filePath));
+    }
+
+    public function updateCurriculum(Request $req, $id)
+    {
+        $user = Users::find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'Usuário não encontrado'], 404);
+        }
+
+        $validator = Validator::make($req->all(), [
+            'curriculum' => 'required|file|mimes:pdf|max:10240', 
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        if ($user->curriculum) {
+            Storage::disk('public')->delete($user->curriculum);
+        }
+
+    
+        $curriculumPath = $req->file('curriculum')->store('curriculums', 'public');
+        $user->curriculum = $curriculumPath;
+        $user->save();
+
+        return response()->json([
+            'message' => 'Currículo atualizado com sucesso!',
+            'curriculum_url' => asset('storage/' . $curriculumPath),
+        ], 200);
+    }
+
+
 }
