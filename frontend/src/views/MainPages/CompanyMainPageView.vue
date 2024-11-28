@@ -8,7 +8,10 @@
       <h1 class="text-5xl font-bold drop-shadow-textShadow2 py-4">
         Suas Vagas Publicadas
       </h1>
-      <section class="flex gap-4 flex-wrap justify-center">
+      <section
+        v-if="jobs.length > 0"
+        class="flex gap-4 flex-wrap justify-center"
+      >
         <div v-for="job in jobs" :key="job.id">
           <div
             class="bg-zinc-200 text-black p-3 shadow-shadow3 rounded-md min-w-64 flex flex-col gap-4"
@@ -49,6 +52,15 @@
               </button>
             </div>
           </div>
+        </div>
+      </section>
+      <section v-else>
+        <p class="text-center text-2xl font-bold mt-14">
+          Ops! Parece que sua empresa ainda não possui vagas publicadas!
+        </p>
+        <div class="absolute top-[23.25rem] left-72 text-2xl font-bold flex gap-2 items-center">
+          <ArrowLeft class="size-14"/>
+          <p>Publique a sua vaga por aqui!</p>
         </div>
       </section>
     </section>
@@ -152,7 +164,7 @@
             </div>
 
             <div class="flex gap-2 items-center">
-              <h2>Status: </h2>
+              <h2>Status:</h2>
               <select
                 v-model="candidate.status"
                 @change="updateStatus(candidate)"
@@ -178,7 +190,7 @@ import Sidebar from "@/components/sidebars/CompanySidebar.vue";
 import ModalJobDetail from "@/components/Modals/JobDetailsModal.vue";
 import ModalCandidate from "@/components/Modals/CandidateModal.vue";
 import axios from "axios";
-import { FileUser } from "lucide-vue-next";
+import { FileUser, ArrowLeft } from "lucide-vue-next";
 import { useRoute } from "vue-router";
 import "vue3-toastify/dist/index.css";
 import { toast } from "vue3-toastify";
@@ -199,6 +211,7 @@ export default {
   components: {
     Sidebar,
     FileUser,
+    ArrowLeft,
     ModalJobDetail,
     ModalCandidate,
   },
