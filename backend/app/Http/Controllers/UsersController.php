@@ -30,6 +30,18 @@ class UsersController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
+        if ($validator->fails()) {
+            if ($validator->errors()->has('email')) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'email já está cadastrado no sistema.',
+                ], 400);
+            }
+
+            return response()->json($validator->errors(), 400);
+        }
+
+
         $imagePath = null;
         if ($req->hasFile('image')) {
             $imagePath = $req->file('image')->store('users', 'public');
