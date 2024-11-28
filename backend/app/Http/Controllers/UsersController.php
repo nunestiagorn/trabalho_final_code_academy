@@ -49,6 +49,8 @@ class UsersController extends Controller
 
         event(new Registered($user));
 
+       
+
         return response()->json([
             'status' => true,
             'message' => "Registration Success",

@@ -4,9 +4,8 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\JobOpeningsController;
 use App\Http\Controllers\ApplicationsController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
+
 
 
 //rotas de usuários
