@@ -10,6 +10,7 @@
           "
           alt="foto do usuário"
           class="w-14 h-14 rounded-full"
+          @error="handleImageError"
         />
         <div class="flex flex-col">
           <h2 class="text-black text-xl font-bold capitalize">
@@ -158,6 +159,9 @@ export default {
     },
   },
   methods: {
+    handleImageError(event) {
+      event.target.src = "/src/assets/images/user.png";
+    },
     LoggedUser() {
       const userId = this.$route.params.id;
       axios

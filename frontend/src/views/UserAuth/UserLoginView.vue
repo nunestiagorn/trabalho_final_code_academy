@@ -146,6 +146,21 @@ import errorIcon from "@/assets/images/error.png";
 import axios from "axios";
 import Modal from "@/components/Modals/Modal.vue";
 
+import "vue3-toastify/dist/index.css";
+import { toast } from "vue3-toastify";
+
+const Toast = (mensagem, type) => {
+  toast(mensagem, {
+    type: type,
+    autoClose: 2500,
+    multiple: false,
+    position: "top-center",
+    toastStyle: {
+      fontSize: "22px",
+    },
+  });
+};
+
 export default {
   name: "Login",
   components: {
@@ -170,6 +185,15 @@ export default {
   },
   methods: {
     LoginUser() {
+      if (!this.users.email.trim()) {
+        Toast("O campo Email deve ser preenchido.", "error");
+        return;
+      }
+      if (!this.users.password.trim()) {
+        Toast("O campo Senha deve ser preenchido.", "error");
+        return;
+      }
+
       axios
         .post(`http://localhost:8001/api/users/login`, this.users)
         .then(({ data }) => {
@@ -183,6 +207,11 @@ export default {
             }
           } catch (err) {
             alert("Falha no sistema");
+          }
+        })
+        .catch((error) => {
+          if (error.response && error.response.status === 401) {
+            Toast("E-mail ou senha incorretos. Tente novamente.", "error");
           }
         });
     },

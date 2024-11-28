@@ -162,6 +162,21 @@ import errorIcon from "@/assets/images/error.png";
 import axios from "axios";
 import Modal from "@/components/Modals/Modal.vue";
 
+import "vue3-toastify/dist/index.css";
+import { toast } from "vue3-toastify";
+
+const Toast = (mensagem, type) => {
+  toast(mensagem, {
+    type: type,
+    autoClose: 2500,
+    multiple: false,
+    position: "top-center",
+    toastStyle: {
+      fontSize: "22px",
+    },
+  });
+};
+
 export default {
   name: "UserRegister",
   components: {
@@ -188,6 +203,23 @@ export default {
   },
   methods: {
     registerUser() {
+      if (!this.users.name.trim()) {
+        Toast("O campo Nome deve ser preenchido.", "error");
+        return;
+      }
+      if (!this.users.email.trim()) {
+        Toast("O campo Email deve ser preenchido.", "error");
+        return;
+      }
+      if (!this.users.password.trim()) {
+        Toast("O campo Senha deve ser preenchido.", "error");
+        return;
+      }
+      if (this.users.password.length < 6) {
+        Toast("A senha deve ter no mínimo 6 caracteres.", "error");
+        return;
+      }
+
       axios
         .post(`http://localhost:8001/api/users`, this.users)
         .then(({ data }) => {
@@ -196,6 +228,11 @@ export default {
             this.Visivel = true;
           } catch (err) {
             alert("Falha no sistema");
+          }
+        })
+        .catch((error) => {
+          if (error.response && error.response.status === 400) {
+            Toast("Este e-mail já está cadastrado no sistema.", "error");
           }
         });
     },

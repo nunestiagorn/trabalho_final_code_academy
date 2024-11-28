@@ -4,9 +4,10 @@
       <div class="flex flex-col gap-3 items-center">
         <h3 class="text-zinc-600 text-md -mt-1">CNPJ: {{ company.cnpj }}</h3>
         <img
-          :src="company.image ? company.image : '@/assets/images/company.png'"
+          :src="company.image"
           alt="foto da empresa"
           class="size-16 rounded-full"
+          @error="handleImageError"
         />
 
         <div
@@ -259,6 +260,9 @@ export default {
     this.LoggedCompany();
   },
   methods: {
+    handleImageError(event) {
+      event.target.src = '/src/assets/images/company.png';
+    },
     LoggedCompany() {
       const companyId = this.$route.params.id;
 

@@ -52,10 +52,7 @@
                 placeholder="Senha"
               />
 
-              <input
-                v-model="companies.recruiter_name"
-                type="hidden"
-              />
+              <input v-model="companies.recruiter_name" type="hidden" />
             </div>
           </div>
 
@@ -131,6 +128,21 @@ import {
 import axios from "axios";
 import Modal from "@/components/Modals/Modal.vue";
 
+import "vue3-toastify/dist/index.css";
+import { toast } from "vue3-toastify";
+
+const Toast = (mensagem, type) => {
+  toast(mensagem, {
+    type: type,
+    autoClose: 2500,
+    multiple: false,
+    position: "top-center",
+    toastStyle: {
+      fontSize: "22px",
+    },
+  });
+};
+
 export default {
   name: "CompanyRegister",
   components: {
@@ -172,6 +184,23 @@ export default {
       this.companies.cnpj = value;
     },
     registerCompany() {
+      if (!this.companies.cnpj.trim()) {
+        Toast("O campo CNPJ deve ser preenchido.", "error");
+        return;
+      }
+      if (!this.companies.name.trim()) {
+        Toast("O campo Nome deve ser preenchido.", "error");
+        return;
+      }
+      if (!this.companies.password.trim()) {
+        Toast("O campo Senha deve ser preenchido.", "error");
+        return;
+      }
+      if (this.companies.password.length < 6) {
+        Toast("A senha deve ter no mínimo 6 caracteres.", "error");
+        return;
+      }
+
       axios
         .post(`http://localhost:8001/api/companies`, this.companies)
         .then(({ data }) => {
@@ -182,9 +211,10 @@ export default {
             alert("Falha ao criar empresa");
           }
         })
-        .catch((err) => {
-          console.error(err);
-          alert("Erro ao criar empresa");
+        .catch((error) => {
+          if (error.response && error.response.status === 400) {
+            Toast("Este CNPJ já está cadastrado no sistema.", "error");
+          }
         });
     },
     redirecionarLogin() {

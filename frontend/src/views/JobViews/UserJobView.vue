@@ -72,7 +72,14 @@
             <span>Recrutador: {{ selectedJob.recruiter }}</span>
           </div>
 
-          <h2 class="-mb-3 ml-2 mt-4">Detalhes da vaga:</h2>
+          <div class="flex flex-col gap-2 mt-2">
+            <h2 class="-mb-2 ml-2">Salário:</h2>
+            <p class="bg-gray-300 text-gray-700 w-5/12 p-2 rounded-lg shadow-[inset_0_0_12px_0px_rgba(0,0,0,0.75)]">
+              {{ selectedJob.salary }}
+            </p>
+          </div>
+
+          <h2 class="-mb-3 ml-2">Detalhes da vaga:</h2>
           <p
             class="overflow-y-auto text-justify resize-none textoDescricao min-h-40 w-full bg-gray-300 text-gray-700 text-lg shadow-[inset_0_0_10px_1px_rgba(0,0,0,0.75)] rounded-lg p-4 break-words"
           >
