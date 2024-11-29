@@ -199,11 +199,19 @@ export default {
         .then(({ data }) => {
           try {
             this.modalStatus = data.status ? "success" : "error";
-            this.Visivel = true;
 
             if (data.status) {
-              this.userId = data.user.id;
-              localStorage.setItem("userId", this.userId);
+              if (data.user.email_verified_at !== null) {
+                this.modalStatus = "success";
+                this.Visivel = true;
+                this.userId = data.user.id;
+                localStorage.setItem("userId", this.userId);
+            } else {
+              Toast(
+                "Seu e-mail ainda não foi verificado. Por favor, verifique sua caixa de entrada.",
+                "error"
+              );
+            }
             }
           } catch (err) {
             alert("Falha no sistema");

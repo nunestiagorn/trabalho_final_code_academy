@@ -1,9 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use Illuminate\Http\Request;
 use App\Models\User;
 /*
 |--------------------------------------------------------------------------
@@ -34,18 +31,15 @@ Route::get('/email/verify/{id}/{hash}', function ($id, $hash) {
         return abort(404, 'User not found');
     }
 
-    // Validar o hash do e-mail
     if (!hash_equals(sha1($user->getEmailForVerification()), $hash)) {
         return abort(403, 'Invalid hash');
     }
 
-    // Atualizar o campo email_verified_at
     if (!$user->email_verified_at) {
         $user->email_verified_at = now();
         $user->save();
     }
 
-    // Redirecionar ao frontend
     return redirect(env('FRONTEND_URL') . '/login');
 
     

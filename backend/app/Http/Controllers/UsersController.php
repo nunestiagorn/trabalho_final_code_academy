@@ -10,61 +10,33 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Notifications\Notifiable;
+use App\Services\UserService;
 
 class UsersController extends Controller
 {
     use Notifiable;
     
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
     public function index()
     {
-        return Users::all();
+        return response()->json($this->userService->getAllUsers());
     }
 
     public function store(Request $req)
     {
-        $validator = Validator::make($req->all(), [
-            'name' => 'required|string|max:50',
-            'email' => 'required|string|email|max:255|unique:users',
-            'role' => 'required|in:admin,recruiter,candidate',
-            'password' => 'required|string|min:6',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'curriculum' => 'nullable|file|mimes:pdf|max:10240'
-        ]);
-
-        if ($validator->fails()) {
-            if ($validator->errors()->has('email')) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'email já está cadastrado no sistema.',
-                ], 400);
-            }
-
-            return response()->json($validator->errors(), 400);
-        }
-
-
-        $imagePath = null;
-        if ($req->hasFile('image')) {
-            $imagePath = $req->file('image')->store('users', 'public');
-        }
-
-        $user = Users::create([
-            'name' => $req->name,
-            'email' => $req->email,
-            'role' => $req->role,
-            'password' => Hash::make($req->password),
-            'image' => $imagePath,
-        ]);
-
-        event(new Registered($user));
-
-       
+        $response = $this->userService->storeUser($req->all());
 
         return response()->json([
-            'status' => true,
-            'message' => "Registration Success",
-            'user' => $user,
-        ]);
+            'status' => $response['status'],
+            'message' => $response['message'],
+            'user' => $response['user'] ?? null,
+        ], $response['code']);
     }
 
 

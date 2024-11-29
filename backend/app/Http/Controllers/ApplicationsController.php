@@ -41,9 +41,6 @@ class ApplicationsController extends Controller
     }
 
 
-
-    //^ estudar melhor o código pra refatoração
-
     public function store(Request $req)
     {
         $application = new Applications;

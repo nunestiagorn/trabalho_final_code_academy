@@ -31,10 +31,10 @@
           <UserCog />
           Editar Perfil
         </button>
-        <RouterLink to="/123" class="user_sidebar_item">
+        <button @click.prevent="abrirModalCurriculum()" class="user_sidebar_item">
           <FileText />
           Currículo
-        </RouterLink>
+        </button>
         <RouterLink
           :to="`/${userId}/vacancies`"
           class="bg-green-600 py-2.5 px-3 w-full flex items-center gap-1.5 rounded-lg cursor-pointer hover:translate-x-2 transition-all hover:bg-emerald-700 hover:font-bold shadow-lg"
@@ -66,7 +66,7 @@
 
     <ModalUser :visivel="VisivelUser" @close="VisivelUser = false">
       <template #headerUser>
-        Editar o Recrutador da empresa: {{ user.name }}
+        Editar seus dados: {{ user.name }}
       </template>
       <template #bodyUser>
         <div class="flex flex-col gap-4">
@@ -97,6 +97,33 @@
         </div>
       </template>
     </ModalUser>
+
+    <ModalCurriculum :visivel="VisivelCurriculum" @close="VisivelCurriculum = false">
+      <template #headerCurriculum>
+        Envie seu currículo
+      </template>
+      <template #bodyCurriculum>
+        <div class="flex flex-col gap-4">
+          <div class="flex flex-col gap-4">
+            <p class="text-2xl font-bold">Dê upload de seu currículo em PDF:</p>
+            <input
+              type="file"
+              @change="onFileChangeCurriculum"
+              class="p-2 rounded-lg outline-none shadow-lg"
+              accept="application/pdf"
+            />
+          </div>
+
+          <button
+            @click="saveUser"
+            type="submit"
+            class="bg-secondaryColor active:scale-75 shadow-lg self-end py-1 px-3 rounded-lg text-zinc-200 font-semibold hover:bg-darkBlue transition-all"
+          >
+            Salvar
+          </button>
+        </div>
+      </template>
+    </ModalCurriculum>
   </aside>
 </template>
 
@@ -111,6 +138,7 @@ import {
   Building2,
 } from "lucide-vue-next";
 import ModalUser from "../Modals/UserModal.vue";
+import ModalCurriculum from "../Modals/CurriculumModal.vue";
 
 import axios from "axios";
 import { RouterLink } from "vue-router";
@@ -139,6 +167,7 @@ export default {
     Info,
     Building2,
     ModalUser,
+    ModalCurriculum,
   },
   data() {
     return {
@@ -148,6 +177,7 @@ export default {
         image: "",
       },
       VisivelUser: false,
+      VisivelCurriculum: false,
     };
   },
   mounted() {
@@ -179,6 +209,33 @@ export default {
     },
     abrirModal() {
       this.VisivelUser = true;
+    },
+    abrirModalCurriculum() {
+      this.VisivelCurriculum = true;
+    },
+    onFileChangeCurriculum(event) {
+      const file = event.target.files[0];
+      if (file && file.type === "application/pdf") {
+        const formData = new FormData();
+        formData.append("curriculum", file);
+
+        const userId = this.$route.params.id;
+        axios
+          .post(`http://localhost:8001/api/users/${userId}/curriculum`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then(() => {
+            Toast("Currículo enviado com sucesso!", "success");
+          })
+          .catch((error) => {
+            console.error("Erro ao enviar currículo:", error);
+            Toast("Falha ao enviar currículo :(", "error");
+          });
+      } else {
+        Toast("Por favor, envie apenas um arquivo PDF.", "error");
+      }
     },
     onFileChange(event) {
       const file = event.target.files[0];

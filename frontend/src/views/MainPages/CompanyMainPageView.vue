@@ -152,15 +152,23 @@
           v-if="candidates.length > 0"
           class="flex flex-col gap-4 max-h-72 overflow-y-scroll"
         >
-          <h3 class="text-lg font-bold">Candidatos:</h3>
+          <h3 class="text-2xl font-bold">Candidatos:</h3>
           <div
             v-for="candidate in candidates"
             :key="candidate.id"
             class="flex justify-between items-center p-2 border-b-2 border-black"
           >
-            <div class="flex gap-2 items-center">
-              <span class="font-semibold">| {{ candidate.userName }}</span>
-              <p class="text-gray-600 text-sm">{{ candidate.userEmail }}</p>
+            <div class="flex flex-col">
+              <div class="flex gap-2 items-center">
+                <span class="font-semibold">| {{ candidate.userName }}</span>
+                <p class="text-gray-600 text-sm">{{ candidate.userEmail }}</p>
+              </div>
+              <button
+                @click="openCurriculum(candidate.user_id)"
+                class="mt-3 bg-blue-500 max-w-36 text-white py-1 px-3 rounded-lg hover:bg-blue-700"
+              >
+                Ver Currículo
+              </button>
             </div>
 
             <div class="flex gap-2 items-center">
@@ -168,7 +176,7 @@
               <select
                 v-model="candidate.status"
                 @change="updateStatus(candidate)"
-                class="py-1 px-2 rounded-full focus:outline-none"
+                class="py-1.5 px-2.5   rounded-full focus:outline-none bg-zinc-400"
               >
                 <option value="pending">Pendente</option>
                 <option value="approved">Aprovado</option>
@@ -270,6 +278,7 @@ export default {
                 ...application,
                 userName: userData.data.name,
                 userEmail: userData.data.email,
+                userCurriculum: userData.data.curriculum,
               };
             })
           );
@@ -281,6 +290,10 @@ export default {
       } catch (error) {
         console.error("Erro ao buscar os candidatos:", error);
       }
+    },
+    openCurriculum(user_id) {
+      const pdfUrl = `http://localhost:8001/api/users/${user_id}/curriculum`;
+      window.open(pdfUrl, '_blank');
     },
     async updateStatus(candidate) {
       try {

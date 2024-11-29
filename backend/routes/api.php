@@ -19,8 +19,8 @@ Route::post('users/login', [UsersController::class, "check"]);
 Route::post('/users/{id}/image', [UsersController::class, 'updateImage']);
 Route::get('/users/{id}/image', [UsersController::class, 'showImage']);
 
-Route::post('/users/{id}/image', [UsersController::class, 'updateCurriculum']);
-Route::get('/users/{id}/image', [UsersController::class, 'showCurruculum']);
+Route::post('/users/{id}/curriculum', [UsersController::class, 'updateCurriculum']);
+Route::get('/users/{id}/curriculum', [UsersController::class, 'showCurriculum']);
 
 //rotas de empresas
 Route::get('companies', [CompaniesController::class, "index"]);
@@ -30,9 +30,8 @@ Route::get('companies/{id}', [CompaniesController::class, "show"]);
 Route::delete('companies/{id}', [CompaniesController::class, "delete"]);
 Route::post('companies/login', [CompaniesController::class, "check"]);
 
-Route::get('/companies/{id}/image', [CompaniesController::class, 'showImage']);
-Route::post('/companies/{id}/image', [CompaniesController::class, 'updateImage']);
-
+Route::post('/users/{id}/image', [UsersController::class, 'updateImage']);
+Route::get('/users/{id}/image', [UsersController::class, 'showImage']);
 
 //rotas de vagas
 Route::get('job_openings', [JobOpeningsController::class, "index"]);
