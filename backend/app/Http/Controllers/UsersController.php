@@ -50,7 +50,7 @@ class UsersController extends Controller
 
         $validator = Validator::make($req->all(), [
             'name' => 'sometimes|required|string|max:50',
-            'email' => 'sometimes|required|string|email|max:255|unique:users,email,' . $user->id,
+            'email' => 'sometimes|required|string|regex:/^[^@]+@[^@]+\.[a-zA-Z]{2,}$/|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:6|confirmed',
             'image' => 'nullable|string',
             'curriculum' => 'nullable|string'
@@ -123,7 +123,6 @@ class UsersController extends Controller
             'user' => $user,
         ]);
     }
-    
     public function showImage($id)
     {
         $user = Users::find($id);

@@ -203,12 +203,19 @@ export default {
   },
   methods: {
     registerUser() {
+
+      const emailRegex = /^[^@]+@[^@]+\.[a-zA-Z]{2,}$/;
+
       if (!this.users.name.trim()) {
         Toast("O campo Nome deve ser preenchido.", "error");
         return;
       }
       if (!this.users.email.trim()) {
         Toast("O campo Email deve ser preenchido.", "error");
+        return;
+      }
+      if (!emailRegex.test(this.users.email)) {
+        Toast("Insira um e-mail válido com um domínio como '.com'.", "error");
         return;
       }
       if (!this.users.password.trim()) {
