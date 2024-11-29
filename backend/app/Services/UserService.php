@@ -63,9 +63,11 @@ class UserService
 
         return [
             'status' => true,
-            'message' => "Registration Success",
+            'message' => "Registrado com Sucesso",
             'user' => $user,
             'code' => 201,
         ];
     }
+
+
 }

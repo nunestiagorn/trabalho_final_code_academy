@@ -37,7 +37,7 @@ class JobOpeningsController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => "Registration Success",
+            'message' => "Registrado com sucesso",
         ]);
     }
 
@@ -51,11 +51,6 @@ class JobOpeningsController extends Controller
         $opening->save();
 
         return response("Success", 200);
-    }
-
-    public function check(Request $req){
-
-
     }
 
     public function show($companyId) {

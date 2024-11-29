@@ -160,7 +160,7 @@ class CompaniesController extends Controller
         $company = Companies::find($id);
 
         if (!$company || !$company->image) {
-            return response()->json(['message' => 'Image not found'], 404);
+            return response()->json(['message' => 'Imagem não encontrada'], 404);
         }
 
         return response()->file(storage_path('app/public/' . $company->image));

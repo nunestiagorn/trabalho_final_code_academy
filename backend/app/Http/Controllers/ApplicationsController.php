@@ -75,17 +75,6 @@ class ApplicationsController extends Controller
         return response()->json($application, 200);
     }
 
-    public function check(Request $req)
-    {
-        $application = Applications::where('recruiter_name', $req->recruiter_name)->first();
-
-        if (!$application) {
-            return response()->json(['message' => 'Não encontrado'], 404);
-        }
-
-        return response()->json($application, 200);
-    }
-
     public function delete(Request $req)
     {
         $application = Applications::find($req->id);
@@ -97,5 +86,16 @@ class ApplicationsController extends Controller
         $application->delete();
 
         return response()->json(['message' => 'Deletado com sucesso'], 200);
+    }
+
+    public function check(Request $req)
+    {
+        $application = Applications::where('recruiter_name', $req->recruiter_name)->first();
+
+        if (!$application) {
+            return response()->json(['message' => 'Não encontrado'], 404);
+        }
+
+        return response()->json($application, 200);
     }
 }
