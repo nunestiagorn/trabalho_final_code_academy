@@ -39,7 +39,7 @@ Route::get('/email/verify/{id}/{hash}', function ($id, $hash) {
         $user->email_verified_at = now();
         $user->save();
     }
-
+    
     return redirect(env('FRONTEND_URL') . '/login');
 
     

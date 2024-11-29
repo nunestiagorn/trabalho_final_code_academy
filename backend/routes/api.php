@@ -6,8 +6,6 @@ use App\Http\Controllers\JobOpeningsController;
 use App\Http\Controllers\ApplicationsController;
 use Illuminate\Support\Facades\Route;
 
-
-
 //rotas de usuários
 Route::get('users', [UsersController::class, "index"]);
 Route::post('users', [UsersController::class, "store"]);
