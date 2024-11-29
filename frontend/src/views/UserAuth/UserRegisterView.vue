@@ -123,7 +123,7 @@
         <p>
           {{
             modalStatus === "success"
-              ? "Sua conta foi criada com sucesso!!!"
+              ? "Sua conta foi criada com sucesso!!! Verifique seu e-mail para ativar sua conta."
               : "Falha ao acessar a conta. Verifique as credenciais e tente novamente."
           }}
         </p>
