@@ -74,9 +74,7 @@
 
           <div class="flex flex-col gap-2 mt-2">
             <h2 class="-mb-2 ml-2">Salário:</h2>
-            <p
-              class="bg-gray-300 text-gray-700 w-5/12 p-2 rounded-lg shadow-[inset_0_0_12px_0px_rgba(0,0,0,0.75)]"
-            >
+            <p class="bg-gray-300 text-gray-700 w-5/12 p-2 rounded-lg shadow-[inset_0_0_12px_0px_rgba(0,0,0,0.75)]">
               {{ selectedJob.salary }}
             </p>
           </div>
@@ -164,15 +162,6 @@ export default {
           "http://localhost:8001/api/job_openings/"
         );
 
-        const userId = this.$route.params.id;
-
-        const { data: applicationsData } = await axios.get(
-          `http://localhost:8001/api/applications/user/${userId}`
-        );
-        const appliedJobIds = applicationsData.map(
-          (application) => application.opening_id
-        );
-
         const companyInfo = await Promise.all(
           jobsData.map(async (job) => {
             const { data: companyData } = await axios.get(
@@ -187,14 +176,11 @@ export default {
           })
         );
 
-        this.jobs = companyInfo.filter(
-          (job) => !appliedJobIds.includes(job.id)
-        );
+        this.jobs = companyInfo;
       } catch (error) {
         console.error("Erro ao buscar os jobs:", error);
       }
     },
-
     abrirModalJobDetails(job) {
       this.selectedJob = job;
       this.VisivelJobDetail = true;
@@ -216,10 +202,6 @@ export default {
           })
           .then(() => {
             candidatarVaga();
-
-            this.jobs = this.jobs.filter(
-              (job) => job.id !== this.selectedJob.id
-            );
           })
           .catch((error) => {
             console.log(error);
